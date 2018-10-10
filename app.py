@@ -72,6 +72,7 @@ def Nginx_access():
             play_book.run()
             play_book.get_result()
 
+    print ('test123')
 
 @app.route('/profilemanager/flumeprofiler/',methods=['POST'])
 def Flume():
