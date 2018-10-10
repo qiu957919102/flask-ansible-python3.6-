@@ -71,7 +71,7 @@ def Nginx_access():
             play_book = ansibleapitest2.my_ansible_play(playbook='/etc/ansible/ansible-paly.yaml', extra_vars=hostip)
             play_book.run()
             play_book.get_result()
- 平日你跟他
+ 
 
 @app.route('/profilemanager/flumeprofiler/',methods=['POST'])
 def Flume():
