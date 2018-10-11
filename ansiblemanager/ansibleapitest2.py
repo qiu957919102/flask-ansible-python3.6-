@@ -144,10 +144,10 @@ class my_ansible_play():
             self.result_all['unreachable'][host] = result._result['msg']
 
         for i in self.result_all['success'].keys():
-            print (i, self.result_all['success'][i])
+            print(i, self.result_all['success'][i])
         for j in self.result_all['fail'].keys():
-            print (j, self.result_all['fail'][j])
+            print(j, self.result_all['fail'][j])
         for k in self.result_all['unreachable'].keys():
-            print (k,self.result_all['unreachable'][k])
+            print(k, self.result_all['unreachable'][k])
 
 

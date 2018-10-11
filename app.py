@@ -18,11 +18,13 @@ app = Flask(__name__)
 
 def hello_world():
     return 'Hello World!'
+
+"""配置管理logcouier中Tomcaterr路由"""
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
 def Tomcat_err():
     Tomcatcreate = logcreate.LogProfile.TomcatErr()
     createhost = Hostcreate.CreateHost()
-    ###从前端获得数据###前端数据需要用逗号，分割
+    """###从前端获得数据###前端数据需要用逗号，分割"""
     Tomcat_errLogPath = request.form['TomcaterrLogPath']
     Tomcat_errLogPathList = Tomcat_errLogPath.split(",")
     Tomcat_errLogType = request.form['TomcaterrLogType']
@@ -47,7 +49,8 @@ def Tomcat_err():
 
 
 
-@app.route('/profilemanager/logcouier/nginxaccess/',methods=['POST'])
+"""配置管理logcouier中nginxacces路由"""
+@app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
 def Nginx_access():
     Nginxcreate = logcreate.LogProfile.NginxAccess()
     createhost = Hostcreate.CreateHost()
@@ -71,9 +74,9 @@ def Nginx_access():
             play_book = ansibleapitest2.my_ansible_play(playbook='/etc/ansible/ansible-paly.yaml', extra_vars=hostip)
             play_book.run()
             play_book.get_result()
- 
 
-@app.route('/profilemanager/flumeprofiler/',methods=['POST'])
+"""配置管理flume路由"""
+@app.route('/profilemanager/flumeprofiler/', methods=['POST'])
 def Flume():
     FlumeWeb = flumecreate.FlumeProfileCreate
     """serversources就一个"""
@@ -106,8 +109,39 @@ def Flume():
     """调用ansibleapi"""
 
 
+"""服务管理logcouier管理"""
+@app.route('/servermanager/logcouier/')
+def ServerLogcouier():
+    pass
+
+"""服务管理flume管理"""
+@app.route('/servermanager/flume/')
+def ServerFlume():
+    pass
+
+"""服务管理工单"""
+@app.route('/servermanager/sheet/')
+def ServerSheet():
+    pass
+"""服务管理工单详情"""
+@app.route('/servermanager/sheet/<ID>/', methods=['POST'])
+def ServerSheetLoad(ID):
+    pass
 
 
+
+"""需求单"""
+@app.route('/rd/requirement/', methods=['POST'])
+def RdRequirement():
+    pass
+"""需求单工单"""
+@app.route('/rd/requiremensheet/')
+def RdRequirementSheet():
+    pass
+"""需求单详细页面"""
+@app.route('/rd/requiremensheet/<ID>', methods=['POST'])
+def RdRequirementSheetLoad(ID):
+    pass
 
 
 if __name__ == '__main__':
