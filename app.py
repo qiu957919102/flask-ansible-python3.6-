@@ -8,9 +8,12 @@
 from flask import Flask, request, render_template, session, flash, redirect,url_for, jsonify
 from profilemanager import logcreate
 from profilemanager import flumecreate
+from ansiblemanager import ansiblevarscreateversion2
+import subprocess
 import time
 app = Flask(__name__)
-
+"""定义一些全局使用的"""
+abnvarcreate = ansiblevarscreateversion2.ansiblepalybookvars
 
 @app.route('/')
 
@@ -20,22 +23,30 @@ def hello_world():
 """配置管理logcouier中Tomcaterr路由"""
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
 def Tomcat_err():
-    Tomcatcreate = logcreate.LogProfile.TomcatErr()
-
+    Tomcatcreate = logcreate.LogProfile.TomcatErr
     """###从前端获得数据###前端数据需要用逗号，分割"""
     Tomcat_errLogPath = request.form['TomcaterrLogPath']
     Tomcat_errLogPathList = Tomcat_errLogPath.split(",")
     Tomcat_errLogType = request.form['TomcaterrLogType']
     Tomcat_errLogTypeList = Tomcat_errLogType.split(",")
     Tomcat_errLogHost = request.form['TomcaterrLogHost']
+    """此处会把hostlist分成好几种方式分别用于创建文件目录即ansible主机vars"""
     Tomcat_errLogHostList = Tomcat_errLogHost.split(",")
+    """下面的会用于创建目录，也会是playbook里面的muluname变量"""
+    DirectoryTomcatHostStr =  ("").join(Tomcat_errLogHostList)
     Tomcat_errLogPathTypedict = dict(zip(Tomcat_errLogPathList, Tomcat_errLogTypeList))
     """####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
     if __name__ == '__main__':
-        for Host in Tomcat_errLogHostList:
-            for Path in Tomcat_errLogPathTypedict.keys():
-                Tomcatcreate(Path, Tomcat_errLogPathTypedict(Path), Host)
-            """调用ansibleapi"""
+        for Path in Tomcat_errLogPathTypedict.keys():
+            Tomcatcreate(Path, Tomcat_errLogPathTypedict(Path), DirectoryTomcatHostStr)
+        """调用ansibl"""
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/Tomcaterr.yml"])
+        """返回的数据"""
+        return jsonify({"message": print(jincheng)})
+
+
+
 
 
 
@@ -45,21 +56,26 @@ def Tomcat_err():
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
 def Nginx_access():
     Nginxcreate = logcreate.LogProfile.NginxAccess()
-
     """###从前端获得数据###前端数据需要用逗号，分割##"""
     Nginx_accessLogPath = request.form['NginxaccessLogPath']
     Nginx_accessLogPathList = Nginx_accessLogPath.split(",")
     Nginx_accessLogType = request.form['NginxaccessLogType']
     Nginx_accessLogTypeList = Nginx_accessLogType.split(",")
     Nginx_accessLogHost = request.form['NginxaccessLogHost']
+    """此处会把hostlist分成好几种方式分别用于创建文件目录即ansible主机vars"""
     Nginx_accessLogHostList = Nginx_accessLogHost.split(",")
+    """下面的会用于创建目录，也会是playbook里面的muluname变量"""
+    DirectoryTomcatHostStr = ("").join(Nginx_accessLogHostList)
     Nginx_accessLogPathTypedict = dict(zip(Nginx_accessLogPathList, Nginx_accessLogTypeList))
     """"####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
     if __name__ == '__main__':
-        for Host in Nginx_accessLogHostList:
-            for Path in Nginx_accessLogPathTypedict.keys():
-                Nginxcreate(Path, Nginx_accessLogPathTypedict(Path), Host)
+        for Path in Nginx_accessLogPathTypedict.keys():
+            Nginxcreate(Path, Nginx_accessLogPathTypedict(Path), DirectoryTomcatHostStr)
             """调用ansibleapi"""
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/NginxAccess.yml"])
+        """返回的数据"""
+        return jsonify({"message": print(jincheng)})
 
 
 """配置管理flume路由"""
@@ -79,21 +95,28 @@ def Flume():
     FlumeWeb_FilePath_list = FlumeWeb_FilePath.split(",")
     """主机字符串"""
     FlumeWeb_LogHost = request.form['FlumeWebLogHost']
+    """此处会把hostlist分成好几种方式分别用于创建文件目录即ansible主机vars"""
     FlumeWeb_LogHost_list = FlumeWeb_LogHost.split(",")
+    """下面的会用于创建目录，也会是playbook里面的muluname变量"""
+    DirectoryTomcatHostStr = ("").join(FlumeWeb_LogHost_list)
     FlumeWeb_LogDir = request.form['FlumeWebLogDir']
     FlumeWeb_FileGroupSingleFilePathDict = dict(zip(FlumeWeb_FileGroupSingle, FlumeWeb_FilePath_list))
     """创建flume模板"""
     if __name__ == "__main__":
-        for Host in FlumeWeb_LogHost_list:
-            FlumeWeb.FlumeProfileHeadOne(ServerSources=FlumeWeb_ServerSources, FileGroups=FlumeWeb_FileGroups_Real, LogHost=Host)
-            for i in FlumeWeb_FileGroupSingleFilePathDict.keys():
-                FlumeWeb.FlumeProfileBodyOne(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=i, FilePath=FlumeWeb_FileGroupSingleFilePathDict(i), LogHost=Host)
-            for j in FlumeWeb_FileGroupSingleFilePathDict.keys():
-                FlumeWeb.FlumeProfileBodyTwo(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=j, LogHost=Host)
-            for k in FlumeWeb_FileGroupSingleFilePathDict.keys():
-                FlumeWeb.FlumeProfileBodyThere(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=k, LogHost=Host, LogDir=FlumeWeb_LogDir)
-            FlumeWeb.FlumeProfileWei(LogHost=Host)
-    """调用ansibleapi"""
+        FlumeWeb.FlumeProfileHeadOne(ServerSources=FlumeWeb_ServerSources, FileGroups=FlumeWeb_FileGroups_Real, LogHost=DirectoryTomcatHostStr)
+        for i in FlumeWeb_FileGroupSingleFilePathDict.keys():
+            FlumeWeb.FlumeProfileBodyOne(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=i, FilePath=FlumeWeb_FileGroupSingleFilePathDict(i), LogHost=DirectoryTomcatHostStr)
+        for j in FlumeWeb_FileGroupSingleFilePathDict.keys():
+            FlumeWeb.FlumeProfileBodyTwo(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=j, LogHost=DirectoryTomcatHostStr)
+        for k in FlumeWeb_FileGroupSingleFilePathDict.keys():
+            FlumeWeb.FlumeProfileBodyThere(ServerSources=FlumeWeb_ServerSources, FileGroupSingle=k, LogHost=DirectoryTomcatHostStr, LogDir=FlumeWeb_LogDir)
+        FlumeWeb.FlumeProfileWei(LogHost=DirectoryTomcatHostStr)
+        """调用ansibleapi"""
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/FlumeProfiler.yml"])
+        """返回的数据"""
+        return jsonify({"message": print(jincheng)})
+
 
 
 """服务管理logcouier管理"""

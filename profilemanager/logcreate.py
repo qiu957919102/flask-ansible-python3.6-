@@ -6,15 +6,16 @@
 # @File    : 
 # @Software: PyCharm
 import os
-AnsblieRoleFilePath = "/apps/etc/ansible/roles/tomcaterr/files/"
+
 class LogProfile:
-    def TomcatErr(self, LogPath, LogType, LogHost):
-        TomcaterrPath = AnsblieRoleFilePath + LogHost
+    def TomcatErr(self, LogPath, LogType, DirectoyHost):
+        AnsblieRoleFilePath = "/etc/ansible/roles/Tomcaterr/files/"
+        TomcaterrPath = AnsblieRoleFilePath + DirectoyHost
         try:
             os.makedirs(TomcaterrPath, mode=755)
         except Exception:
             pass
-        TomcaterrFilePath = TomcaterrPath + "/" + LogType.conf
+        TomcaterrFilePath = TomcaterrPath + "/" + LogType + ".conf"
         with open(TomcaterrFilePath, 'w+', encoding='utf-8') as f:
             f.writelines("[" + "\n")
             f.writelines('"paths"' + ":" + "[" + LogPath + "]" + "," + "\n")
@@ -34,13 +35,14 @@ class LogProfile:
 
 
 
-    def NginxAccess(self, LogPath, LogType, LogHost):
-        NginxaccessPath = AnsblieRoleFilePath + LogHost
+    def NginxAccess(self, LogPath, LogType, DirectoyHost):
+        AnsblieRoleFilePath = "/etc/ansible/roles/NginxAccess/files/"
+        NginxaccessPath = AnsblieRoleFilePath + DirectoyHost
         try:
             os.makedirs(NginxaccessPath, mode=755)
         except Exception:
             pass
-        NginxaccessFilePath = NginxaccessPath + "/" + LogType.conf
+        NginxaccessFilePath = NginxaccessPath + "/" + LogType + ".conf"
         with open(NginxaccessFilePath, 'w', encoding='utf-8') as f:
             f.writelines("[" + "\n" )
             f.writelines("{" + "\n")

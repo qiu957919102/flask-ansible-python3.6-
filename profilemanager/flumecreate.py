@@ -6,15 +6,15 @@
 # @File    : 
 # @Software: PyCharm
 import os
-FlumeDirectoryPath = '/etc/ansible/roles/flumeprofile/files'
+FlumeDirectoryPath = '/etc/ansible/roles/FlumeProfiler/files'
 class FlumeProfileCreate:
     """ServerSources, FileGroups, FileGroupSingle, FilePath, LogHost, LogDir 分别对应的是flume的source名（一个）；输入的文件组全部（字符串）；单个文件组名会与文件路径一一对应；需要部署的机器，会在hdfs上生成的目录名（一个）"""
     def FlumeProfileHeadOne(self, ServerSources, FileGroups, FileGroupSingle, FilePath, LogHost, LogDir):
-        realFlumeDirectoryPath = FlumeDirectoryPath+LogHost
+        realFlumeDirectoryPath = FlumeDirectoryPath + LogHost
         os.makedirs(realFlumeDirectoryPath, mode=755, exist_ok=False)
         realFlumeFilePath = realFlumeDirectoryPath + "/" + "flume-conf.properties"
         """这里也可以用列表的方式实现"""
-        with open(realFlumeFilePath, 'a+', encoding='utf-8') as f:
+        with open(realFlumeFilePath, 'w+', encoding='utf-8') as f:
             f.writelines("server.sources =" + ServerSources + "\n")
             f.writelines("server.channels = fileChannel" + "\n")
             f.writelines("server.sinks = flumeServerSink1 flumeServerSink2" +  "\n")
@@ -26,7 +26,7 @@ class FlumeProfileCreate:
             f.writelines("server.sources." + ServerSources + ".multilineSplitRegex = \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}" + "\n")
 
     def FlumeProfileBodyOne(self,ServerSources, FileGroups, FileGroupSingle, FilePath, LogHost, Logdir):
-        realFlumeDirectoryPath = FlumeDirectoryPath+LogHost
+        realFlumeDirectoryPath = FlumeDirectoryPath + LogHost
         os.makedirs(realFlumeDirectoryPath, mode=755, exist_ok=False)
         realFlumeFilePath = realFlumeDirectoryPath + "/" + "flume-conf.properties"
         with open(realFlumeFilePath, 'a+', encoding='utf-8') as f:
