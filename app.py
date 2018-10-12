@@ -8,8 +8,6 @@
 from flask import Flask, request, render_template, session, flash, redirect,url_for, jsonify
 from profilemanager import logcreate
 from profilemanager import flumecreate
-from ansiblemanager import Hostcreate
-from ansiblemanager import ansibleapitest2
 import time
 app = Flask(__name__)
 
@@ -23,7 +21,7 @@ def hello_world():
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
 def Tomcat_err():
     Tomcatcreate = logcreate.LogProfile.TomcatErr()
-    createhost = Hostcreate.CreateHost()
+
     """###从前端获得数据###前端数据需要用逗号，分割"""
     Tomcat_errLogPath = request.form['TomcaterrLogPath']
     Tomcat_errLogPathList = Tomcat_errLogPath.split(",")
@@ -38,12 +36,6 @@ def Tomcat_err():
             for Path in Tomcat_errLogPathTypedict.keys():
                 Tomcatcreate(Path, Tomcat_errLogPathTypedict(Path), Host)
             """调用ansibleapi"""
-            createhost(Host)
-            """改动playbook的位置"""
-            hostip=Host
-            play_book = ansibleapitest2.my_ansible_play(playbook='/etc/ansible/ansible-paly.yaml', extra_vars=hostip)
-            play_book.run()
-            play_book.get_result()
 
 
 
@@ -53,7 +45,7 @@ def Tomcat_err():
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
 def Nginx_access():
     Nginxcreate = logcreate.LogProfile.NginxAccess()
-    createhost = Hostcreate.CreateHost()
+
     """###从前端获得数据###前端数据需要用逗号，分割##"""
     Nginx_accessLogPath = request.form['NginxaccessLogPath']
     Nginx_accessLogPathList = Nginx_accessLogPath.split(",")
@@ -68,12 +60,7 @@ def Nginx_access():
             for Path in Nginx_accessLogPathTypedict.keys():
                 Nginxcreate(Path, Nginx_accessLogPathTypedict(Path), Host)
             """调用ansibleapi"""
-            createhost(Host)
-            """改动playbook的位置"""
-            hostip = Host
-            play_book = ansibleapitest2.my_ansible_play(playbook='/etc/ansible/ansible-paly.yaml', extra_vars=hostip)
-            play_book.run()
-            play_book.get_result()
+
 
 """配置管理flume路由"""
 @app.route('/profilemanager/flumeprofiler/', methods=['POST'])
@@ -113,10 +100,18 @@ def Flume():
 @app.route('/servermanager/logcouier/')
 def ServerLogcouier():
     pass
+"""服务管理logcouier状态启动"""
+@app.route('/servermanager/logcouier/<IP>/<STATUS>/')
+def ServerLogcouierStatus(IP, STATUS):
+    pass
 
 """服务管理flume管理"""
 @app.route('/servermanager/flume/')
 def ServerFlume():
+    pass
+"""服务管理flume状态启动"""
+@app.route('/servermanager/flume/<IP>/<STATUS>/')
+def ServerFlumeStatus(IP, STATUS):
     pass
 
 """服务管理工单"""
