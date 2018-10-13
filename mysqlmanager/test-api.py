@@ -5,8 +5,14 @@
 # @Site    : 
 # @File    : 
 # @Software: PyC
-from mysqlmanager import mysqlapi
-testmysql = mysqlapi.MySql('192.168.136.132', '3306', 'root', '123456', 'test')
+from mysqlmanager import logcouiemysql
+logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
 if __name__ == '__main__':
-
-    testmysql.Select_mysql(' select * from user;')
+    creater = "liyuan"
+    errlogpath = "1235566"
+    path = ""
+    type = "678"
+    hostip = "900"
+    hostname = 'sna,dnk'
+    output = "ashjkdghjhahjdkgajgds"
+    logcouierinsertmysql(creater=creater, errlogpath=errlogpath, path=path, type=type, hostip=hostip, hostname=hostname, output=output)

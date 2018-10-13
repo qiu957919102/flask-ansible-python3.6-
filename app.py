@@ -10,7 +10,7 @@ from profilemanager import logcreate
 from profilemanager import flumecreate
 from ansiblemanager import ansiblevarscreateversion2
 import subprocess
-import time
+from mysqlmanager import flumemysql, logcouiemysql
 app = Flask(__name__)
 """定义一些全局使用的"""
 abnvarcreate = ansiblevarscreateversion2.ansiblepalybookvars
@@ -34,6 +34,8 @@ def Tomcat_err():
     Tomcat_errLogHostList = Tomcat_errLogHost.split(",")
     """下面的会用于创建目录，也会是playbook里面的muluname变量"""
     DirectoryTomcatHostStr =  ("").join(Tomcat_errLogHostList)
+    """获得对应的主机名"""
+    Tomcat_errLogHostName = request.form['TomcaterrLogHostName']
     Tomcat_errLogPathTypedict = dict(zip(Tomcat_errLogPathList, Tomcat_errLogTypeList))
     """####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
     if __name__ == '__main__':
@@ -44,6 +46,8 @@ def Tomcat_err():
         jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/Tomcaterr.yml"])
         """返回的数据"""
         return jsonify({"message": print(jincheng)})
+        logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
+        logcouierinsertmysql(creater="test-liyuan", errlogpath=Tomcat_errLogPath, path="null", type=Tomcat_errLogType, hostip=Tomcat_errLogHost, hostname=Tomcat_errLogHostName, output=print(jincheng))
 
 
 
@@ -66,6 +70,8 @@ def Nginx_access():
     Nginx_accessLogHostList = Nginx_accessLogHost.split(",")
     """下面的会用于创建目录，也会是playbook里面的muluname变量"""
     DirectoryTomcatHostStr = ("").join(Nginx_accessLogHostList)
+    """主机ip对应的主机名"""
+    Nginx_accessLogHostName = request.form['NginxaccessLogHostName']
     Nginx_accessLogPathTypedict = dict(zip(Nginx_accessLogPathList, Nginx_accessLogTypeList))
     """"####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
     if __name__ == '__main__':
@@ -76,6 +82,9 @@ def Nginx_access():
         jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/NginxAccess.yml"])
         """返回的数据"""
         return jsonify({"message": print(jincheng)})
+        logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
+        logcouierinsertmysql(creater="test-liyuan", errlogpath="null", path=Nginx_accessLogPath, type=Nginx_accessLogType,
+                             hostip=Nginx_accessLogHost, hostname=Nginx_accessLogHostName, output=print(jincheng))
 
 
 """配置管理flume路由"""
@@ -99,6 +108,8 @@ def Flume():
     FlumeWeb_LogHost_list = FlumeWeb_LogHost.split(",")
     """下面的会用于创建目录，也会是playbook里面的muluname变量"""
     DirectoryTomcatHostStr = ("").join(FlumeWeb_LogHost_list)
+    """主机ip对应的主机名"""
+    FlumeWeb_LogHostName = request.form['FlumeWebLogHostName']
     FlumeWeb_LogDir = request.form['FlumeWebLogDir']
     FlumeWeb_FileGroupSingleFilePathDict = dict(zip(FlumeWeb_FileGroupSingle, FlumeWeb_FilePath_list))
     """创建flume模板"""
@@ -116,7 +127,8 @@ def Flume():
         jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/FlumeProfiler.yml"])
         """返回的数据"""
         return jsonify({"message": print(jincheng)})
-
+        flumeinsertmysql = flumemysql.flume_mysql.InserInto
+        flumeinsertmysql(creater="test-liyuan", logpath=FlumeWeb_FilePath, groups=FlumeWeb_FileGroups, flumeserversource=FlumeWeb_ServerSources, flumelogdir=FlumeWeb_LogDir, hostip=FlumeWeb_LogHost, hostname=FlumeWeb_LogHostName, output=print(jincheng))
 
 
 """服务管理logcouier管理"""

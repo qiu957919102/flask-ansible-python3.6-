@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb73fb17-0991-4e2c-aada-1604e27e4e8b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysqlmanager/flumemysql.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mysqlmanager/logcouiemysql.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ansiblemanager/Hostcreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/ansiblemanager/Hostcreateversion1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ansiblemanager/ansibleapi.py" beforeDir="false" afterPath="$PROJECT_DIR$/ansiblemanager/ansibleapiversion1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profilemanager/flumecreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/profilemanager/flumecreate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/profilemanager/logcreate.py" beforeDir="false" afterPath="$PROJECT_DIR$/profilemanager/logcreate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysqlmanager/mysqlapi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysqlmanager/test-api.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysqlmanager/test-api.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,9 +16,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/bdg_baijiahulian_com$logcouierinsert.coverage" NAME="logcouierinsert Coverage Results" MODIFIED="1539342654263" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mysqlmanager" />
     <SUITE FILE_PATH="coverage/bdg_baijiahulian_com$bdg_baijiahulian_com.coverage" NAME="bdg-baijiahulian.com Coverage Results" MODIFIED="1538208069413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/bdg_baijiahulian_com$.coverage" NAME=" Coverage Results" MODIFIED="1538221041618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/bdg_baijiahulian_com$test_api.coverage" NAME="test-api Coverage Results" MODIFIED="1539064204540" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mysqlmanager" />
+    <SUITE FILE_PATH="coverage/bdg_baijiahulian_com$test_api.coverage" NAME="test-api Coverage Results" MODIFIED="1539341918478" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mysqlmanager" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1480881348">
@@ -37,7 +37,7 @@
         <counts>
           <entry key="cfg" value="1" />
           <entry key="flumeweiba" value="1" />
-          <entry key="py" value="25" />
+          <entry key="py" value="29" />
           <entry key="pyi" value="2" />
           <entry key="txt" value="4" />
         </counts>
@@ -46,22 +46,22 @@
         <counts>
           <entry key="Ini" value="1" />
           <entry key="PLAIN_TEXT" value="5" />
-          <entry key="Python" value="25" />
+          <entry key="Python" value="29" />
           <entry key="PythonStub" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="13" />
-          <entry key="dummy" value="72" />
-          <entry key="py" value="8472" />
-          <entry key="txt" value="331" />
+          <entry key="dummy" value="86" />
+          <entry key="py" value="9968" />
+          <entry key="txt" value="362" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="403" />
-          <entry key="Python" value="8485" />
+          <entry key="PLAIN_TEXT" value="448" />
+          <entry key="Python" value="9981" />
         </counts>
       </usages-collector>
     </session>
@@ -98,13 +98,40 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="115" column="72" selection-start-line="115" selection-start-column="72" selection-end-line="115" selection-end-column="72" />
+            <state relative-caret-position="502">
+              <caret line="137" column="23" lean-forward="true" selection-start-line="137" selection-start-column="23" selection-end-line="137" selection-end-column="23" />
               <folding>
                 <element signature="e#147#239#0" expanded="true" />
-                <marker date="1539334008147" expanded="true" signature="6205:6230" ph="..." />
-                <marker date="1539334008147" expanded="true" signature="6487:6611" ph="..." />
+                <marker date="1539432435986" expanded="true" signature="7411:7436" ph="..." />
+                <marker date="1539432435986" expanded="true" signature="7693:7817" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mysqlmanager/test-api.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mysqlmanager/logcouiemysql.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mysqlmanager/flumemysql.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="134">
+              <caret line="9" column="96" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="100" />
             </state>
           </provider>
         </entry>
@@ -148,14 +175,18 @@
         <option value="$PROJECT_DIR$/ansiblemanager/Hostcreate.py" />
         <option value="$PROJECT_DIR$/ansiblemanager/ansibleapi-test2.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/mysqlmanager/test-api.py" />
-        <option value="$PROJECT_DIR$/mysqlmanager/mysqlapi.py" />
         <option value="$PROJECT_DIR$/profilemanager/flumeweiba" />
         <option value="$PROJECT_DIR$/ansiblemanager/ansibleapitest2.py" />
         <option value="$PROJECT_DIR$/ansiblemanager/ansibleosversion2.py" />
         <option value="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" />
         <option value="$PROJECT_DIR$/profilemanager/logcreate.py" />
         <option value="$PROJECT_DIR$/profilemanager/flumecreate.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/mysqlapi.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/insert.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/logcouierinsert.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/test-api.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/flumemysql.py" />
+        <option value="$PROJECT_DIR$/mysqlmanager/logcouiemysql.py" />
         <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
@@ -167,8 +198,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="610" />
-    <option name="y" value="217" />
+    <option name="x" value="787" />
+    <option name="y" value="192" />
     <option name="width" value="1120" />
     <option name="height" value="625" />
   </component>
@@ -189,17 +220,7 @@
             <path>
               <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
               <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
-              <item name="ansiblemanager" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
               <item name="mysqlmanager" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
-              <item name="profilemanager" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -226,7 +247,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test-api">
+  <component name="RunManager" selected="Python.logcouierinsert">
     <configuration name="ansible2.6-remode-debug" type="PyRemoteDebugConfigurationType" factoryName="Python Remote Debug">
       <option name="PORT" value="9999" />
       <option name="HOST" value="172.24.74.7" />
@@ -237,6 +258,28 @@
       </PathMappingSettings>
       <option name="REDIRECT_OUTPUT" value="true" />
       <option name="SUSPEND_AFTER_CONNECT" value="true" />
+      <method v="2" />
+    </configuration>
+    <configuration name="logcouierinsert" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="bdg-baijiahulian.com" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/mysqlmanager" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="C:\VM\py项目\bdg-baijiahulian.com\mysqlmanager\logcouiemysql.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
     <configuration name="test-api" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -280,9 +323,11 @@
       <item itemvalue="Flask server.bdg-baijiahulian.com" />
       <item itemvalue="Python Remote Debug.ansible2.6-remode-debug" />
       <item itemvalue="Python.test-api" />
+      <item itemvalue="Python.logcouierinsert" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.logcouierinsert" />
         <item itemvalue="Python.test-api" />
       </list>
     </recent_temporary>
@@ -340,7 +385,14 @@
       <option name="project" value="LOCAL" />
       <updated>1539313875184</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="实现log与flume配置管理功能，待加入工单系统">
+      <created>1539334156045</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1539334156046</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -356,12 +408,12 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24731903" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24731903" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" weight="0.3297587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.2527174" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.11914894" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49932975" weight="0.39518413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -379,18 +431,18 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24463007" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24731903" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Favorites" order="2" weight="0.3297587" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2527174" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.25248227" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49932975" weight="0.39518413" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3243626" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50067025" side_tool="true" weight="0.2082153" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.14730878" />
@@ -415,7 +467,8 @@
     <MESSAGE value="第一次提交代码 原始的状态" />
     <MESSAGE value="需求设计" />
     <MESSAGE value="logcouier文件创建修复" />
-    <option name="LAST_COMMIT_MESSAGE" value="logcouier文件创建修复" />
+    <MESSAGE value="实现log与flume配置管理功能，待加入工单系统" />
+    <option name="LAST_COMMIT_MESSAGE" value="实现log与flume配置管理功能，待加入工单系统" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -424,11 +477,6 @@
           <url>file://$PROJECT_DIR$/ansiblemanager/ansibleapiversion1.py</url>
           <line>75</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/mysqlmanager/test-api.py</url>
-          <line>9</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -470,20 +518,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="423" column="8" selection-start-line="423" selection-start-column="8" selection-end-line="423" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mysqlmanager/test-api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="36" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mysqlmanager/mysqlapi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="66" column="30" lean-forward="true" selection-start-line="66" selection-start-column="30" selection-end-line="66" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -535,6 +569,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/profilemanager/flumecreate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="494">
+          <caret line="47" column="88" selection-start-line="47" selection-start-column="88" selection-end-line="47" selection-end-column="88" />
+          <folding>
+            <marker date="1539334008153" expanded="true" signature="408:412" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysqlmanager/mysqlapi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="268">
+          <caret line="24" column="30" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
+          <folding>
+            <element signature="e#149#159#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -555,24 +609,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/profilemanager/flumecreate.py">
+    <entry file="file://$PROJECT_DIR$/mysqlmanager/test-api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="47" column="88" selection-start-line="47" selection-start-column="88" selection-end-line="47" selection-end-column="88" />
-          <folding>
-            <marker date="1539334008153" expanded="true" signature="408:412" ph="..." />
-          </folding>
+        <state relative-caret-position="323">
+          <caret line="17" column="33" selection-start-line="17" selection-start-column="33" selection-end-line="17" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysqlmanager/logcouiemysql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysqlmanager/flumemysql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="9" column="96" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="100" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="115" column="72" selection-start-line="115" selection-start-column="72" selection-end-line="115" selection-end-column="72" />
+        <state relative-caret-position="502">
+          <caret line="137" column="23" lean-forward="true" selection-start-line="137" selection-start-column="23" selection-end-line="137" selection-end-column="23" />
           <folding>
             <element signature="e#147#239#0" expanded="true" />
-            <marker date="1539334008147" expanded="true" signature="6205:6230" ph="..." />
-            <marker date="1539334008147" expanded="true" signature="6487:6611" ph="..." />
+            <marker date="1539432435986" expanded="true" signature="7411:7436" ph="..." />
+            <marker date="1539432435986" expanded="true" signature="7693:7817" ph="..." />
           </folding>
         </state>
       </provider>
