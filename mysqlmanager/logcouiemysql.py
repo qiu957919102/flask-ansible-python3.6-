@@ -6,11 +6,13 @@
 # @File    : 
 # @Software: PyCharm
 import pymysql
+from mysqlmanager import configs
+config = configs.configs
 class log_couier_mysql:
     def InserInto(creater, errlogpath, path, type, hostip, hostname, output):
         # 2.插入操作
-        db = pymysql.connect(host="192.168.136.132", user="root", password="123456", db="bdg_agent", port=3306)
-
+        db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'],
+                             db=config['db'], port=config['port'], charset=config['charset'])
         # 使用cursor()方法获取操作游标
         cur = db.cursor()
         insert_mysql = ("insert into bdg_agent_logcouier_sheet" " (`creator`,`errlogpath`,`logpath`,`type`,`hostip`, `hostname`, `output`)" " VALUES (%s, %s, %s, %s, %s, %s, %s);")
@@ -20,9 +22,9 @@ class log_couier_mysql:
             # 提交
             db.commit()
         except Exception as e:
-            print("123")
             # 错误回滚
             db.rollback()
         finally:
             db.close()
+
 
