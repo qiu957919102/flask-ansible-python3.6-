@@ -7,10 +7,16 @@
 # @Software: PyCharm
 """用于创建ansibleplaybook vars里面变量"""
 import os
-def ansiblepalybookvars(playbookvarsfilepath, varhostip, varmuluname):
+def ansiblepalybookvars(playbookvarsfilepath, playbookhost, varhostip, varmuluname):
     with open(playbookvarsfilepath, 'w+', encoding='utf-8') as f:
-        f.writelines("hostip: " + varhostip + "\n")
         f.writelines("muluname: " + varmuluname + "\n")
+
+    with open(playbookhost, 'w+', encoding='utf-8') as f:
+        f.writelines("[" + "ansibleplaybookhost" + "]" + "\n")
+
+    for i in range(len(varhostip)):
+        with open(playbookhost, 'a+', encoding='utf-8') as f:
+            f.writelines(varhostip[i] + "\n")
 
 
 

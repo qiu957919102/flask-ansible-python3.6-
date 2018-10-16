@@ -9,6 +9,7 @@ from flask import Flask, request, render_template, session, flash, redirect,url_
 from profilemanager import logcreate
 from profilemanager import flumecreate
 from ansiblemanager import ansiblevarscreateversion2
+from servicelog import logerr,loginfo
 import subprocess
 from mysqlmanager import flumemysql, logcouiemysql, insertintoiphostname
 app = Flask(__name__)
@@ -45,8 +46,8 @@ def Tomcat_err():
         for Path in Tomcat_errLogPathTypedict.keys():
             Tomcatcreate(Path, Tomcat_errLogPathTypedict[Path], DirectoryTomcatHostStr)
         """调用ansibl"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/Tomcaterr.yml"])
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", playbookhost="/etc/ansible/Tomcaterr_hosts", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/Tomcaterr_hosts /etc/ansible/Tomcaterr.yml"])
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
@@ -57,7 +58,8 @@ def Tomcat_err():
 
         for HostIp in Tomcat_errIpHostNamedict.keys():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Tomcat_errIpHostNamedict[HostIp], creator="test-liyuan")
-
+        """记录日志"""
+        loginfo.logger.info("配置管理Tomcat" + " " + Tomcat_errLogPath + " " + Tomcat_errLogType + " " + Tomcat_errLogHost + " " + Tomcat_errLogHostName + " " + jincheng)
         return jsonify("123")
 
 
@@ -92,8 +94,8 @@ def Nginx_access():
         for Path in Nginx_accessLogPathTypedict.keys():
             Nginxcreate(Path, Nginx_accessLogPathTypedict[Path], DirectoryTomcatHostStr)
             """调用ansibleapi"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/NginxAccess.yml"])
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", playbookhost="/etc/asnible/NginxAccess_hosts", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/asnible/NginxAccess_hosts /etc/ansible/NginxAccess.yml"])
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
@@ -103,7 +105,8 @@ def Nginx_access():
         logcouieriphostnameinsertmysql = insertintoiphostname.IpHostNameInserInto.LogCouierInserInto
         for HostIp in Nginx_accessLogHostIpHostNamedict.keys():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Nginx_accessLogHostIpHostNamedict[HostIp], creator="test-liyuan")
-
+        """记录日志"""
+        loginfo.logger.info("配置管理nginx" + " " + Nginx_accessLogPath + " " + Nginx_accessLogType + " " + Nginx_accessLogHost + " " + Nginx_accessLogHostName + " " + jincheng)
         return jsonify("123")
 
 """配置管理flume路由"""
@@ -112,7 +115,9 @@ def Flume():
     FlumeWeb = flumecreate.FlumeProfileCreate
     """serversources就一个"""
     FlumeWeb_ServerSources = request.form['FlumeWebServerSources']
+    """这里先转列表在转回字符串是为了去掉多余的，号之类的"""
     FlumeWeb_ServerSourcesList = FlumeWeb_ServerSources.split(",")
+    FlumeWeb_ServerSourcesStr = " ".join(FlumeWeb_ServerSourcesList)
     """filegroups字符串"""
     FlumeWeb_FileGroups = request.form['FlumeWebFileGroups']
     """将上面得到的FileGroups切割"""
@@ -134,32 +139,36 @@ def Flume():
     """生成ip跟hostname对应的字典"""
     FlumeWeb_IpHostNamedict = dict(zip(FlumeWeb_LogHost_list, FlumeWeb_LogHostNameList))
     FlumeWeb_LogDir = request.form['FlumeWebLogDir']
+    """这里先转列表在转回字符串是为了去掉多余的，号之类的"""
     FlumeWeb_LogDirList = FlumeWeb_LogDir.split(",")
+    FlumeWeb_LogDirStr = "".join(FlumeWeb_LogDirList)
     """生成group与path对应字典"""
     FlumeWeb_FileGroupSingleFilePathDict = dict(zip(FlumeWeb_FileGroupSingle, FlumeWeb_FilePath_list))
     """创建flume模板"""
     if __name__ == "__main__":
-        FlumeWeb.FlumeProfileHeadOne(ServerSources=FlumeWeb_ServerSourcesList, FileGroups=FlumeWeb_FileGroups_Real, LogHost=DirectoryTomcatHostStr)
+        FlumeWeb.FlumeProfileHeadOne(ServerSources=FlumeWeb_ServerSourcesStr, FileGroups=FlumeWeb_FileGroups_Real, LogHost=DirectoryTomcatHostStr)
         for i in FlumeWeb_FileGroupSingleFilePathDict.keys():
-            FlumeWeb.FlumeProfileBodyOne(ServerSources=FlumeWeb_ServerSourcesList, FileGroupSingle=i, FilePath=FlumeWeb_FileGroupSingleFilePathDict[i], LogHost=DirectoryTomcatHostStr)
+            FlumeWeb.FlumeProfileBodyOne(ServerSources=FlumeWeb_ServerSourcesStr, FileGroupSingle=i, FilePath=FlumeWeb_FileGroupSingleFilePathDict[i], LogHost=DirectoryTomcatHostStr)
         for j in FlumeWeb_FileGroupSingleFilePathDict.keys():
-            FlumeWeb.FlumeProfileBodyTwo(ServerSources=FlumeWeb_ServerSourcesList, FileGroupSingle=j, LogHost=DirectoryTomcatHostStr)
+            FlumeWeb.FlumeProfileBodyTwo(ServerSources=FlumeWeb_ServerSourcesStr, FileGroupSingle=j, LogHost=DirectoryTomcatHostStr)
         for k in FlumeWeb_FileGroupSingleFilePathDict.keys():
-            FlumeWeb.FlumeProfileBodyThere(ServerSources=FlumeWeb_ServerSourcesList, FileGroupSingle=k, LogHost=DirectoryTomcatHostStr, LogDir=FlumeWeb_LogDirList)
+            FlumeWeb.FlumeProfileBodyThere(ServerSources=FlumeWeb_ServerSourcesStr, FileGroupSingle=k, LogHost=DirectoryTomcatHostStr, LogDir=FlumeWeb_LogDirStr)
         FlumeWeb.FlumeProfileWei(LogHost=DirectoryTomcatHostStr)
         """调用ansibleapi"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook /etc/ansible/FlumeProfiler.yml"])
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", playbookhost="/etc/ansible/Flume_hosts", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/Flume_hosts FlumeProfiler.yml"])
         """返回的数据"""
         """生成工单"""
         flumeinsertmysql = flumemysql.flume_mysql.InserInto
-        flumeinsertmysql(creater="test-liyuan", logpath=FlumeWeb_FilePath, groups=FlumeWeb_FileGroups, flumeserversource=FlumeWeb_ServerSourcesList,
-                         flumelogdir=FlumeWeb_LogDirList, hostip=FlumeWeb_LogHost, hostname=FlumeWeb_LogHostName, output=jincheng)
+        flumeinsertmysql(creater="test-liyuan", logpath=FlumeWeb_FilePath, groups=FlumeWeb_FileGroups, flumeserversource=FlumeWeb_ServerSourcesStr,
+                         flumelogdir=FlumeWeb_LogDirStr, hostip=FlumeWeb_LogHost, hostname=FlumeWeb_LogHostName, output=jincheng)
         """生成ip与hostname唯一对应工单"""
         flumeiphostnameinsert = insertintoiphostname.IpHostNameInserInto.FlumeInserInto
         for HostIp in FlumeWeb_IpHostNamedict.keys():
             flumeiphostnameinsert(ip=HostIp, hostname=FlumeWeb_IpHostNamedict[HostIp], creator="test-liyuan")
 
+        """记录日志"""
+        loginfo.logger.info("配置管理flume" + " " + FlumeWeb_FilePath + " " + FlumeWeb_FileGroups + " " + FlumeWeb_LogDirStr + " " + FlumeWeb_LogHost + " " + FlumeWeb_LogHostName + " " + jincheng)
         return jsonify("123")
 
 

@@ -10,7 +10,7 @@ import os
 class LogProfile:
     def TomcatErr(self, LogPath, LogType, DirectoyHost):
         AnsblieRoleFilePath = "/etc/ansible/roles/Tomcaterr/files/"
-        TomcaterrPath = AnsblieRoleFilePath + DirectoyHost
+        TomcaterrPath = AnsblieRoleFilePath + DirectoyHost + "/" + "conf.d"
         try:
             os.makedirs(TomcaterrPath, mode=755)
         except Exception:
@@ -37,7 +37,7 @@ class LogProfile:
 
     def NginxAccess(self, LogPath, LogType, DirectoyHost):
         AnsblieRoleFilePath = "/etc/ansible/roles/NginxAccess/files/"
-        NginxaccessPath = AnsblieRoleFilePath + DirectoyHost
+        NginxaccessPath = AnsblieRoleFilePath + DirectoyHost + "/" + "conf.d"
         try:
             os.makedirs(NginxaccessPath, mode=755)
         except Exception:

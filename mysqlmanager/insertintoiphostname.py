@@ -8,6 +8,7 @@
 """这个是用来存放工单主机ip跟hostname"""
 """设计思想，我们在数据库中对ip跟hostname设置UNIQUE KEY 唯一key保证了数据的可靠性，如果commit失败就直接回滚，不会中断程序"""
 import pymysql
+from servicelog import loginfo, logerr
 from mysqlmanager import configs
 config = configs.configs
 class IpHostNameInserInto:
@@ -26,6 +27,7 @@ class IpHostNameInserInto:
             db.commit()
         except Exception as e:
             # 错误回滚
+            logerr.logger.error(e)
             db.rollback()
         finally:
             db.close()
@@ -45,6 +47,7 @@ class IpHostNameInserInto:
             db.commit()
         except Exception as e:
             # 错误回滚
+            logerr.logger.error(e)
             db.rollback()
         finally:
             db.close()

@@ -6,6 +6,7 @@
 # @File    : 
 # @Software: PyCharm
 import pymysql
+from servicelog import loginfo, logerr
 from mysqlmanager import configs
 config = configs.configs
 class log_couier_mysql:
@@ -23,6 +24,7 @@ class log_couier_mysql:
             db.commit()
         except Exception as e:
             # 错误回滚
+            logerr.logger.error(e)
             db.rollback()
         finally:
             db.close()
