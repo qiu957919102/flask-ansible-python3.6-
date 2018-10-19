@@ -17,7 +17,7 @@ consoleHandler = logging.StreamHandler()
 consoleHandler.setLevel(logging.DEBUG)
 
 # 文件Handler
-fileHandler = logging.FileHandler('/var/log/flaskinfo.log', mode='a+', encoding='UTF-8')
+fileHandler = logging.FileHandler('/apps2/var/log/flaskinfo.log', mode='a+', encoding='UTF-8')
 fileHandler.setLevel(logging.NOTSET)
 
 # Formatter

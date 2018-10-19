@@ -47,7 +47,7 @@ class LogProfile:
         with open(NginxaccessFilePath, 'w', encoding='utf-8') as f:
             f.writelines("[" + "\n" )
             f.writelines("{" + "\n")
-            f.writelines('"paths"' + ": " + "[ " + LogPath + " ]" + "," + "\n")
+            f.writelines('"paths"' + ": " + "[ " + '"' + LogPath + '"' + " ]" + "," + "\n")
             f.writelines('"fields"' + ": " + "{ " + '"type"' + ": " + '"' + LogType + '" ' + "}" + "," + "\n")
             f.writelines('"dead time"' + ": " + '"10s"' + "\n")
             f.writelines("}" + "\n")
