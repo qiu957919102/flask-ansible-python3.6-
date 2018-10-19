@@ -46,7 +46,7 @@ def Tomcat_err():
         for Path in Tomcat_errLogPathTypedict.keys():
             Tomcatcreate(Path, Tomcat_errLogPathTypedict[Path], DirectoryTomcatHostStr)
         """调用ansibl"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", playbookhost="/etc/ansible/Tomcaterr_hosts", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", playbookhost="/etc/ansible/profile_hosts/Tomcaterr_hosts", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
         jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/profile_hosts/Tomcaterr_hosts --verbose /etc/ansible/profile_playbook/Tomcaterr.yml"])
         """返回的数据"""
         """生成工单"""
@@ -71,7 +71,7 @@ def Tomcat_err():
 """配置管理logcouier中nginxacces路由"""
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
 def Nginx_access():
-    Nginxcreate = logcreate.LogProfile.NginxAccess()
+    Nginxcreate = logcreate.LogProfile.NginxAccess
     """###从前端获得数据###前端数据需要用逗号，分割##"""
     Nginx_accessLogPath = request.form['NginxaccessLogPath']
     Nginx_accessLogPathList = Nginx_accessLogPath.split(",")
@@ -92,15 +92,15 @@ def Nginx_access():
     """"####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
     if __name__ == '__main__':
         for Path in Nginx_accessLogPathTypedict.keys():
-            Nginxcreate(Path, Nginx_accessLogPathTypedict[Path], DirectoryTomcatHostStr)
+            Nginxcreate(LogPath=Path, LogType=Nginx_accessLogPathTypedict[Path], DirectoyHost=DirectoryTomcatHostStr)
             """调用ansibleapi"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", playbookhost="/etc/asnible/NginxAccess_hosts", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/asnible/profile_hosts/NginxAccess_hosts --verbose /etc/ansible/profile_playbook/NginxAccess.yml"])
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", playbookhost="/etc/ansible/profile_hosts/NginxAccess_hosts", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/profile_hosts/NginxAccess_hosts --verbose /etc/ansible/profile_playbook/NginxAccess.yml"])
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
         logcouierinsertmysql(creater="test-liyuan", errlogpath="null", path=Nginx_accessLogPath, type=Nginx_accessLogType,
-                             hostip=Nginx_accessLogHost, hostname=Nginx_accessLogHostName, output=print(jincheng))
+                             hostip=Nginx_accessLogHost, hostname=Nginx_accessLogHostName, output=jincheng)
         """生成ip跟host对应工单上级管理菜单"""
         logcouieriphostnameinsertmysql = insertintoiphostname.IpHostNameInserInto.LogCouierInserInto
         for HostIp in Nginx_accessLogHostIpHostNamedict.keys():
@@ -155,7 +155,7 @@ def Flume():
             FlumeWeb.FlumeProfileBodyThere(ServerSources=FlumeWeb_ServerSourcesStr, FileGroupSingle=k, LogHost=DirectoryTomcatHostStr, LogDir=FlumeWeb_LogDirStr)
         FlumeWeb.FlumeProfileWei(LogHost=DirectoryTomcatHostStr)
         """调用ansibleapi"""
-        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", playbookhost="/etc/ansible/Flume_hosts", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
+        abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", playbookhost="/etc/ansible/profile_hosts/Flume_hosts", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
         jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/profile_hosts/Flume_hosts --verbose /etc/ansible/profile_playbook/FlumeProfiler.yml"])
         """返回的数据"""
         """生成工单"""
@@ -175,6 +175,7 @@ def Flume():
 """服务管理logcouier管理"""
 @app.route('/servermanager/logcouier/', methods=['POST'])
 def ServerLogcouier():
+    pass
 
 """服务管理logcouier状态启动"""
 @app.route('/servermanager/logcouier/<IP>/<STATUS>/')
@@ -216,4 +217,4 @@ def RdRequirementSheetLoad(ID):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=80, host='0.0.0.0')
