@@ -50,7 +50,7 @@ class FlumeProfileCreate:
         os.makedirs(realFlumeDirectoryPath, mode=755, exist_ok=False)
         realFlumeFilePath = realFlumeDirectoryPath + "/" + "flume-conf.properties"
         #####这边有两种方式实现###一种是文件内容复制，一种是写道代码里面###我们采用第一种方式
-        with open ("./flumeweiba",'r+',encoding='utf-8') as f:
+        with open ("/etc/ansible/roles/FlumeProfiler/files/flumeweiba", 'r+', encoding='utf-8') as f:
             flumeweiba = f.readlines()
         with open(realFlumeFilePath, 'a+', encoding='utf-8') as f:
             f.writelines(flumeweiba)

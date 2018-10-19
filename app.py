@@ -47,7 +47,7 @@ def Tomcat_err():
             Tomcatcreate(Path, Tomcat_errLogPathTypedict[Path], DirectoryTomcatHostStr)
         """调用ansibl"""
         abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/Tomcaterr/vars/main.yml", playbookhost="/etc/ansible/Tomcaterr_hosts", varhostip=Tomcat_errLogHostList, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/Tomcaterr_hosts /etc/ansible/Tomcaterr.yml"])
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/profile_hosts/Tomcaterr_hosts --verbose /etc/ansible/profile_playbook/Tomcaterr.yml"])
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
@@ -95,7 +95,7 @@ def Nginx_access():
             Nginxcreate(Path, Nginx_accessLogPathTypedict[Path], DirectoryTomcatHostStr)
             """调用ansibleapi"""
         abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/NginxAccess/vars/main.yml", playbookhost="/etc/asnible/NginxAccess_hosts", varhostip=Nginx_accessLogHostList, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/asnible/NginxAccess_hosts /etc/ansible/NginxAccess.yml"])
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/asnible/profile_hosts/NginxAccess_hosts --verbose /etc/ansible/profile_playbook/NginxAccess.yml"])
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
@@ -156,7 +156,7 @@ def Flume():
         FlumeWeb.FlumeProfileWei(LogHost=DirectoryTomcatHostStr)
         """调用ansibleapi"""
         abnvarcreate(playbookvarsfilepath="/etc/ansible/roles/FlumeProfiler/vars/main.yml", playbookhost="/etc/ansible/Flume_hosts", varhostip=FlumeWeb_LogHost_list, varmuluname=DirectoryTomcatHostStr)
-        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/Flume_hosts FlumeProfiler.yml"])
+        jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/profile_hosts/Flume_hosts --verbose /etc/ansible/profile_playbook/FlumeProfiler.yml"])
         """返回的数据"""
         """生成工单"""
         flumeinsertmysql = flumemysql.flume_mysql.InserInto
@@ -173,9 +173,9 @@ def Flume():
 
 
 """服务管理logcouier管理"""
-@app.route('/servermanager/logcouier/',)
+@app.route('/servermanager/logcouier/', methods=['POST'])
 def ServerLogcouier():
-    pass
+
 """服务管理logcouier状态启动"""
 @app.route('/servermanager/logcouier/<IP>/<STATUS>/')
 def ServerLogcouierStatus(IP, STATUS):
