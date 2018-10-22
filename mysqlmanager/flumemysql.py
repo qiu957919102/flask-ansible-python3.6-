@@ -47,7 +47,63 @@ class flume_mysql:
             body = []
             for i in range(cur.rowcount):
                 body.append({'id': results[i][0], 'ip': results[i][1], 'hostname': results[i][2], 'creator': results[i][3]})
-                return body
+                return str(body)
+        except Exception as e:
+            # 错误回滚
+            logerr.logger.error(e)
+            db.rollback()
+        finally:
+            db.close()
+
+    """工单的一级菜单"""
+    def Select_Flume_sample_sheet(pageNo, pagesize):
+        db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'], db=config['db'], port=config['port'], charset=config['charset'])
+
+        cur = db.cursor()
+        """分页执行"""
+        """tablenameshi logcouier"""
+        select_mysql = ("select id,creator,create_time,hostip,hostname from bdg_agent_flume_sheet" " where id >(%s-1)*%s limit %s" )
+        select_mysql_data = (int(pageNo), int(pagesize), int(pagesize))
+
+        try:
+            """执行sql语句"""
+            cur.execute(select_mysql, select_mysql_data)
+            """获取查询到的记录"""
+            print(cur.rowcount)
+            results = cur.fetchall()
+            body = []
+            for i in range(cur.rowcount):
+                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4]})
+            """这里返回的是一个被字符串后的list"""
+            return str(body)
+        except Exception as e:
+            # 错误回滚
+            logerr.logger.error(e)
+            db.rollback()
+        finally:
+            db.close()
+
+    """工单的二级菜单"""
+    def Select_Flume_all_sheet(id):
+        db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'], db=config['db'], port=config['port'], charset=config['charset'])
+
+        cur = db.cursor()
+        """tablenameshi logcouier"""
+        select_mysql = ("select id,creator,create_time,hostip,hostname,logpath,`groups`,`flumeserversource`,`flumelogdir`,`output` from bdg_agent_flume_sheet" " where id = %s" )
+        select_mysql_data = (int(id))
+
+        try:
+            """执行sql语句"""
+            cur.execute(select_mysql, select_mysql_data)
+            """获取查询到的记录"""
+            print(cur.rowcount)
+            results = cur.fetchall()
+            body = []
+            for i in range(cur.rowcount):
+                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4], 'logpath': results[i][5],
+                             "groups": results[i][6], "flumeserversource": results[i][7], "flumelogdir": results[i][8], "output": results[i][9]})
+            """这里返回的是一个被字符串后的list"""
+            return str(body)
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)
