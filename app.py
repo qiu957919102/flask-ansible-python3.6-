@@ -5,14 +5,30 @@
 # @Site    :
 # @File    :
 # @Software: PyCharm
-from flask import Flask, request, render_template, session, flash, redirect,url_for, jsonify
+from flask import Flask, render_template, jsonify, redirect, request, url_for, flash
 from profilemanager import logcreate
 from profilemanager import flumecreate
 from ansiblemanager import ansiblevarscreateversion2
-from servicelog import logerr,loginfo
+from servicelog import loginfo, logerr
 import subprocess
 from mysqlmanager import flumemysql, logcouiemysql, insertintoiphostname, pagecount, rdmysql
-import time
+from flask_mail import Mail, Message
+import threading
+from login import ldap
+from flask import session
+from datetime import timedelta
+"""Session 对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的 Web 页之间跳转时，存储在 Session 对象中的变量将不会丢失，
+而是在整个用户会话中一直存在下去。当用户请求来自应用程序的 Web 页时，如果该用户还没有会话，则 Web 服务器将自动创建一个 Session 对象。当会话过期或被放弃后，服务器将终止该会话。
+Session 对象最常见的一个用法就是存储用户的首选项"""
+"""redis的控制"""
+import redis
+"""这样写每次都有连接redis的消耗
+r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
+"""
+"""采用以下的方法做连接资源池"""
+pool = redis.ConnectionPool(host='127.0.0.1', port=6379, decode_responses=True, max_connections=10000)
+r = redis.Redis(connection_pool=pool)
+
 app = Flask(__name__)
 """定义一些全局使用的"""
 """ansibled的"""
@@ -22,12 +38,89 @@ abnvarcreatetwo = ansiblevarscreateversion2.ansiblefuwumangage
 PageCount = pagecount.Select_MysqlCount
 """每页的页数"""
 Page_Size = 15
+"""邮件服务配置"""
+app.config['MAIL_SERVER'] = 'smtpproxy.baijiahulian.com'
+app.config['MAIL_PORT'] = 25
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_DEBUG'] = True
+app.config['MAIL_DEFAULT_SENDER'] = 'op@baijiahulian.com'
+mail = Mail(app)
+"""异步发送邮件"""
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+"""定义session key值 secret_key：密钥。这个是必须的，如果没有配置 secret_key 就直接使用 session 会报错"""
+app.secret_key = 'Z&ugQh7oSN3k!XOR%tBT'
 @app.route('/')
 def hello_world():
-    return 'Hello World! lala'
+    return 'Hello World! l ala'
+
+"""ldap认证"""
+@app.route('/login', methods=['POST'])
+def ldap_login():
+    username = request.form['username']
+    password = request.form['password']
+    LDAP = ldap.ldap_auth
+    """进行ldap验证"""
+    data = LDAP(username=username, password=password)
+    userID = data[3]
+    """op跟大数据的人员控制"""
+    User = ['zhangliyuan01', 'chenbixia', 'jialiyang', 'yangyakun', 'zhangpeng', 'zhuxingtao', 'zhangxiaolong', 'wanglei01', 'wangfan01', 'quxiyang']
+    if username in User and data[0]:
+        """返回10086状态码，显示全网页"""
+        try:
+            r.set(username, userID, ex=36000)
+            """只有成功的才会被保留再session中"""
+            session['username'] = username
+            """session为永久，过期时间为10小时，跟redis内session保持一致"""
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=10)
+            return jsonify({"code": 10086,
+                           "username": data[3]})
+        except Exception as e:
+            logerr.logger.error(e)
+            return jsonify(e)
+
+    elif data[0]:
+        """返回10000状态码，只显示rd具有的网页,data[3]为登陆显示"""
+        try:
+            r.set(username, userID, ex=36000)
+            """只有成功的才会被保留再session中"""
+            session['username'] = username
+            """session为永久，过期时间为10小时，跟redis内session保持一致"""
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=10)
+            return jsonify({"code": 10000,
+                            "username": data[3]})
+        except Exception as e:
+            logerr.logger.error(e)
+            return jsonify(e)
+    else:
+        """前端接到699后，会跳转到login页面"""
+        """前端接到599，表示密码错误，跳转到login页面"""
+        return jsonify({"code": 599,
+                        "message": "账号或者密码错误，请重新登陆"})
+
+"""装饰器，拦截器"""
+def login_required(func):
+    def one(*args, **kwargs):
+        if not r.get(session.get('username')):
+            try:
+                session.pop('username')
+            except Exception as e:
+                logerr.logger.error(e)
+            return jsonify({"code": 699,
+                            "message": "账号无效或权限过期，请重新登陆"})
+        """普通的装饰器不用这样写，flask的装饰器必须要这种格式"""
+        return func(*args, **kwargs)
+    return one
+
+
 
 """配置管理logcouier中Tomcaterr路由"""
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
+@login_required
 def Tomcat_err():
     Tomcatcreate = logcreate.LogProfile.TomcatErr
     """###从前端获得数据###前端数据需要用逗号，分割"""
@@ -66,7 +159,8 @@ def Tomcat_err():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Tomcat_errIpHostNamedict[HostIp], creator="test-liyuan")
         """记录日志"""
         loginfo.logger.info("配置管理Tomcat" + " " + Tomcat_errLogPath + " " + Tomcat_errLogType + " " + Tomcat_errLogHost + " " + Tomcat_errLogHostName + " " + jincheng)
-        return jsonify("123")
+        return jsonify({"code": 200,
+                        "output": str(jincheng)})
 
 
 
@@ -76,6 +170,7 @@ def Tomcat_err():
 
 """配置管理logcouier中nginxacces路由"""
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
+@login_required
 def Nginx_access():
     Nginxcreate = logcreate.LogProfile.NginxAccess
     """###从前端获得数据###前端数据需要用逗号，分割##"""
@@ -113,10 +208,12 @@ def Nginx_access():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Nginx_accessLogHostIpHostNamedict[HostIp], creator="test-liyuan")
         """记录日志"""
         loginfo.logger.info("配置管理nginx" + " " + Nginx_accessLogPath + " " + Nginx_accessLogType + " " + Nginx_accessLogHost + " " + Nginx_accessLogHostName + " " + jincheng)
-        return jsonify("123")
+        return jsonify({"code": 200,
+                        "output": str(jincheng)})
 
 """配置管理flume路由"""
 @app.route('/profilemanager/flumeprofiler/', methods=['POST'])
+@login_required
 def Flume():
     FlumeWeb = flumecreate.FlumeProfileCreate
     """serversources就一个"""
@@ -175,12 +272,14 @@ def Flume():
 
         """记录日志"""
         loginfo.logger.info("配置管理flume" + " " + FlumeWeb_FilePath + " " + FlumeWeb_FileGroups + " " + FlumeWeb_LogDirStr + " " + FlumeWeb_LogHost + " " + FlumeWeb_LogHostName + " " + jincheng)
-        return jsonify("123")
+        return jsonify({"code": 200,
+                        "output": str(jincheng)})
 
 
 """服务管理logcouier管理"""
 """一：logcouier所在机器"""
 @app.route('/servermanager/logcouier/<LogCouierPageNo>', methods=['POST'])
+@login_required
 def ServerLogcouier(LogCouierPageNo):
     LogCouierPage_NO = LogCouierPageNo
     if __name__ == '__main__':
@@ -190,7 +289,8 @@ def ServerLogcouier(LogCouierPageNo):
                         'message': LogCouierSelect_Data})
 
 """服务管理logcouier状态启动"""
-@app.route('/servermanager/logcouier/<STATUS>/',methods=['POST'])
+@app.route('/servermanager/logcouier/detailed/<STATUS>/',methods=['POST'])
+@login_required
 def ServerLogcouierStatus(STATUS):
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     LogCouier_IP = request.form('LogCouier_IP')
@@ -202,12 +302,14 @@ def ServerLogcouierStatus(STATUS):
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierStop.yml"])
         elif STATUS == str('restart'):
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierRestart.yml"])
-        return jsonify({"message": jincheng})
+        return jsonify({"code": 200,
+                        "output": str(jincheng)})
 
 
 """服务管理flume管理"""
 """一：flume所在机器"""
 @app.route('/servermanager/flume/<FlumePageNo>', methods=['POST'])
+@login_required
 def ServerFlume(FlumePageNo):
     FlumePage_NO = FlumePageNo
     if __name__ == '__main__':
@@ -217,7 +319,8 @@ def ServerFlume(FlumePageNo):
                         'message': FlumeSelect_Data})
 
 """服务管理flume状态启动"""
-@app.route('/servermanager/flume/<STATUS>/', methods=['POST'])
+@app.route('/servermanager/flume/detailed/<STATUS>/', methods=['POST'])
+@login_required
 def ServerFlumeStatus(STATUS):
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     Flume_IP = request.form['FLumeIP']
@@ -228,11 +331,13 @@ def ServerFlumeStatus(STATUS):
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf stop flume'"])
         elif STATUS == str('restart'):
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf restart flume'"])
-        return jsonify({"message": jincheng})
+        return jsonify({"code": 200,
+                        "output": str(jincheng)})
 
 """服务管理工单"""
 """logcouier一级菜单"""
 @app.route('/servermanager/logcouier/sheet/<LogCouierPageNo>', methods=['POST'])
+@login_required
 def ServerLogCouierSheet(LogCouierPageNo):
     LogCouier_PageNo = LogCouierPageNo
     if __name__ == 'main':
@@ -243,6 +348,7 @@ def ServerLogCouierSheet(LogCouierPageNo):
 
 """flume的一级菜单"""
 @app.route('/servermanager/flume/sheet/<FlumePageNo>', methods=['POST'])
+@login_required
 def ServerFlumeSheet(FlumePageNo):
     Flume_PageNo = FlumePageNo
     if __name__ == 'main':
@@ -253,7 +359,8 @@ def ServerFlumeSheet(FlumePageNo):
 
 """服务管理工单详情"""
 """logcouier二级菜单"""
-@app.route('/servermanager/logcouier/sheet/<id>/', methods=['POST'])
+@app.route('/servermanager/logcouier/sheet/detailed/<id>/', methods=['POST'])
+@login_required
 def ServerLogcouierSheetLoad(id):
     ID = id
     if __name__ == 'main':
@@ -261,7 +368,8 @@ def ServerLogcouierSheetLoad(id):
         return jsonify({"message": LogCouierSelect_Data})
 
 """flume的二级菜单"""
-@app.route('/servermanager/flume/sheet/<id>/', methods=['POST'])
+@app.route('/servermanager/flume/sheet/detailed/<id>/', methods=['POST'])
+@login_required
 def ServerFlumeSheetLoad(id):
     ID = id
     if __name__ == 'main':
@@ -272,6 +380,7 @@ def ServerFlumeSheetLoad(id):
 
 """需求单"""
 @app.route('/rd/requirement/', methods=['POST'])
+@login_required
 def RdRequirement():
     """多个项目会分割会在数据库中分割成多条记录，通过时间戳来判断是同一个工单"""
     RdProject = request.form['rdproject']
@@ -285,10 +394,22 @@ def RdRequirement():
         rdmysql.rd_mysql.InserInto(creater='test-liyuan', project=RdProject, errlogpath=RdErrlogPath, logpath=RdLogPath,
                                        hostip=RdHostIp, notify=RdNotify)
         """记录日志"""
-        loginfo.logger.info("rd需求单记录" + " " + "项目名："  + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ "
+        loginfo.logger.info("rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ "
                                 + "在哪些主机上:" + RdHostIp + "/ " + "需要通知的人：" + RdNotify)
+        """邮件服务"""
+        msg = Message("Rd新需求单",
+                      recipients=["op@baijiahulian.com"])
+        msg.add_recipient("bdg-agent.baijiahulian.com")
+        msg.body = "rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ " + "在哪些主机上:" \
+                   + RdHostIp + "/ " + "需要通知的人：" + RdNotify + " " + "详情请到工单系统中查询"
+        """异步发邮件"""
+        thr = threading.Thread(target=send_async_email, args=[app, msg])
+        thr.start()
+        return jsonify({"code": 200,
+                        "message": "已经通知op"})
 """需求单工单"""''
 @app.route('/rd/requiremensheet/<pageNo>')
+@login_required
 def RdRequirementSheet(pageNo):
     """此处默认必须是第一页"""
     RdPageNO = pageNo
@@ -298,7 +419,8 @@ def RdRequirementSheet(pageNo):
         return jsonify({"pagenum": RdPage_Num,
                         "message": Rd_Data})
 """需求单详细页面"""
-@app.route('/rd/requiremensheet/<id>', methods=['POST'])
+@app.route('/rd/requiremensheet/detailed/<id>', methods=['POST'])
+@login_required
 def RdRequirementSheetLoad(id):
     ID = id
     if __name__ == 'main':

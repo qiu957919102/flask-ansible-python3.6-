@@ -13,7 +13,7 @@ config = configs.configs
 class flume_mysql:
     def InserInto(creater, logpath, groups, flumeserversource, flumelogdir, hostip, hostname, output):
         # 2.插入操作
-        db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'],
+        db = pymysql.connect(host=config['host'], user=confg['user'], password=config['password'],
                              db=config['db'], port=config['port'], charset=config['charset'])
         # 使用cursor()方法获取操作游标
         cur = db.cursor()
