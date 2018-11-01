@@ -432,5 +432,28 @@ def RdRequirementSheetLoad(id):
         return jsonify({"message": RdSelect_Data})
 
 
+
+
+
+"""登出页面"""
+@app.route('/logout', methods=['POST'])
+@login_required
+def logout():
+    try:
+        r.delete(session.get('username'))
+        session.pop('username')
+    except Exception as e:
+        logerr.logger.error(e)
+
+
+"""op/bdg确认rd工单处理按钮"""
+@app.route('/queren/<id>', methods=['POST'])
+@login_required
+def queren(id):
+    ID = id
+    if __name__ == 'main':
+        rdmysql.rd_mysql.Update_rd_all_sheet(id=ID)
+        return jsonify({"message": "ok"})
+
 if __name__ == '__main__':
     app.run(debug=True, port=10000, host='0.0.0.0')
