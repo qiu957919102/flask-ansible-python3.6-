@@ -16,7 +16,7 @@ class rd_mysql:
                              db=config['db'], port=config['port'], charset=config['charset'])
         # 使用cursor()方法获取操作游标
         cur = db.cursor()
-        insert_mysql = ("insert into bdg_agent_rd_sheet" " (`creater`, `project`, `errlogpath`, `logpath`, `hostip`, `notify`)" " VALUES (%s, %s, %s, %s, %s, %s);")
+        insert_mysql = ("insert into bdg_agent_rd_sheet" " (`creator`, `project`, `errlogpath`, `logpath`, `hostip`, `notify`)" " VALUES (%s, %s, %s, %s, %s, %s);")
         insert_mysql_data = (creater, project, errlogpath, logpath, hostip, notify)
         try:
             cur.execute(insert_mysql, insert_mysql_data)

@@ -13,11 +13,11 @@ config = configs.configs
 class flume_mysql:
     def InserInto(creater, logpath, groups, flumeserversource, flumelogdir, hostip, hostname, output):
         # 2.插入操作
-        db = pymysql.connect(host=config['host'], user=confg['user'], password=config['password'],
+        db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'],
                              db=config['db'], port=config['port'], charset=config['charset'])
         # 使用cursor()方法获取操作游标
         cur = db.cursor()
-        insert_mysql = ("insert into bdg_agent_flume_sheet" " (`creater`, `logpath`, `groups`, `flumeserversource`, `flumelogdir`, `hostip`, `hostname`, `output`)" " VALUES (%s, %s, %s, %s, %s, %s, %s, %s);")
+        insert_mysql = ("insert into bdg_agent_flume_sheet" " (`creator`, `logpath`, `groups`, `flumeserversource`, `flumelogdir`, `hostip`, `hostname`, `output`)" " VALUES (%s, %s, %s, %s, %s, %s, %s, %s);")
         insert_mysql_data = (creater, logpath, groups, flumeserversource, flumelogdir, hostip, hostname, output)
         try:
             cur.execute(insert_mysql, insert_mysql_data)

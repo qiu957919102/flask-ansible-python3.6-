@@ -122,6 +122,7 @@ def login_required(func):
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
 @login_required
 def Tomcat_err():
+    creater = session.get('username')
     Tomcatcreate = logcreate.LogProfile.TomcatErr
     """###从前端获得数据###前端数据需要用逗号，分割"""
     Tomcat_errLogPath = request.form['TomcaterrLogPath']
@@ -150,13 +151,13 @@ def Tomcat_err():
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
-        logcouierinsertmysql(creater="test-liyuan", errlogpath=Tomcat_errLogPath, path="null", type=Tomcat_errLogType,
+        logcouierinsertmysql(creater=creater, errlogpath=Tomcat_errLogPath, path="null", type=Tomcat_errLogType,
                              hostip=Tomcat_errLogHost, hostname=Tomcat_errLogHostName, output=jincheng)
         """生成ip跟host对应工单上级管理"""
         logcouieriphostnameinsertmysql = insertintoiphostname.IpHostNameInserInto.LogCouierInserInto
 
         for HostIp in Tomcat_errIpHostNamedict.keys():
-            logcouieriphostnameinsertmysql(ip=HostIp, hostname=Tomcat_errIpHostNamedict[HostIp], creator="test-liyuan")
+            logcouieriphostnameinsertmysql(ip=HostIp, hostname=Tomcat_errIpHostNamedict[HostIp], creater=creater)
         """记录日志"""
         loginfo.logger.info("配置管理Tomcat" + " " + Tomcat_errLogPath + " " + Tomcat_errLogType + " " + Tomcat_errLogHost + " " + Tomcat_errLogHostName + " " + jincheng)
         return jsonify({"code": 200,
@@ -172,6 +173,7 @@ def Tomcat_err():
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
 @login_required
 def Nginx_access():
+    creater = session.get('username')
     Nginxcreate = logcreate.LogProfile.NginxAccess
     """###从前端获得数据###前端数据需要用逗号，分割##"""
     Nginx_accessLogPath = request.form['NginxaccessLogPath']
@@ -200,12 +202,12 @@ def Nginx_access():
         """返回的数据"""
         """生成工单"""
         logcouierinsertmysql = logcouiemysql.log_couier_mysql.InserInto
-        logcouierinsertmysql(creater="test-liyuan", errlogpath="null", path=Nginx_accessLogPath, type=Nginx_accessLogType,
+        logcouierinsertmysql(creater=creater, errlogpath="null", path=Nginx_accessLogPath, type=Nginx_accessLogType,
                              hostip=Nginx_accessLogHost, hostname=Nginx_accessLogHostName, output=jincheng)
         """生成ip跟host对应工单上级管理菜单"""
         logcouieriphostnameinsertmysql = insertintoiphostname.IpHostNameInserInto.LogCouierInserInto
         for HostIp in Nginx_accessLogHostIpHostNamedict.keys():
-            logcouieriphostnameinsertmysql(ip=HostIp, hostname=Nginx_accessLogHostIpHostNamedict[HostIp], creator="test-liyuan")
+            logcouieriphostnameinsertmysql(ip=HostIp, hostname=Nginx_accessLogHostIpHostNamedict[HostIp], creater=creater)
         """记录日志"""
         loginfo.logger.info("配置管理nginx" + " " + Nginx_accessLogPath + " " + Nginx_accessLogType + " " + Nginx_accessLogHost + " " + Nginx_accessLogHostName + " " + jincheng)
         return jsonify({"code": 200,
@@ -215,6 +217,7 @@ def Nginx_access():
 @app.route('/profilemanager/flumeprofiler/', methods=['POST'])
 @login_required
 def Flume():
+    creater = session.get('username')
     FlumeWeb = flumecreate.FlumeProfileCreate
     """serversources就一个"""
     FlumeWeb_ServerSources = request.form['FlumeWebServerSources']
@@ -263,12 +266,12 @@ def Flume():
         """返回的数据"""
         """生成工单"""
         flumeinsertmysql = flumemysql.flume_mysql.InserInto
-        flumeinsertmysql(creater="test-liyuan", logpath=FlumeWeb_FilePath, groups=FlumeWeb_FileGroups, flumeserversource=FlumeWeb_ServerSourcesStr,
+        flumeinsertmysql(creater=creater, logpath=FlumeWeb_FilePath, groups=FlumeWeb_FileGroups, flumeserversource=FlumeWeb_ServerSourcesStr,
                          flumelogdir=FlumeWeb_LogDirStr, hostip=FlumeWeb_LogHost, hostname=FlumeWeb_LogHostName, output=jincheng)
         """生成ip与hostname唯一对应工单"""
         flumeiphostnameinsert = insertintoiphostname.IpHostNameInserInto.FlumeInserInto
         for HostIp in FlumeWeb_IpHostNamedict.keys():
-            flumeiphostnameinsert(ip=HostIp, hostname=FlumeWeb_IpHostNamedict[HostIp], creator="test-liyuan")
+            flumeiphostnameinsert(ip=HostIp, hostname=FlumeWeb_IpHostNamedict[HostIp], creater=creater)
 
         """记录日志"""
         loginfo.logger.info("配置管理flume" + " " + FlumeWeb_FilePath + " " + FlumeWeb_FileGroups + " " + FlumeWeb_LogDirStr + " " + FlumeWeb_LogHost + " " + FlumeWeb_LogHostName + " " + jincheng)
@@ -382,6 +385,7 @@ def ServerFlumeSheetLoad(id):
 @app.route('/rd/requirement/', methods=['POST'])
 @login_required
 def RdRequirement():
+    creater = session.get('username')
     """多个项目会分割会在数据库中分割成多条记录，通过时间戳来判断是同一个工单"""
     RdProject = request.form['rdproject']
     RdErrlogPath = request.form['rderrlogpath']
@@ -391,7 +395,7 @@ def RdRequirement():
     """下面会得到一个十三位的时间戳，会根据这个时间戳到时候计算是否是属于同一个工单"""
     """RdTime = int(round(time.time() * 1000))"""
     if __name__ == 'main':
-        rdmysql.rd_mysql.InserInto(creater='test-liyuan', project=RdProject, errlogpath=RdErrlogPath, logpath=RdLogPath,
+        rdmysql.rd_mysql.InserInto(creater=creater, project=RdProject, errlogpath=RdErrlogPath, logpath=RdLogPath,
                                        hostip=RdHostIp, notify=RdNotify)
         """记录日志"""
         loginfo.logger.info("rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ "

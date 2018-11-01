@@ -12,7 +12,7 @@ from servicelog import loginfo, logerr
 from mysqlmanager import configs
 config = configs.configs
 class IpHostNameInserInto:
-    def LogCouierInserInto(ip, hostname, creator):
+    def LogCouierInserInto(ip, hostname, creater):
         # 2.插入操作
         db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'],
                              db=config['db'], port=config['port'], charset=config['charset'])
@@ -20,7 +20,7 @@ class IpHostNameInserInto:
         cur = db.cursor()
         insert_mysql = (
             "insert into bdg_agent_logcouier_host" " (`ip`,`hostname`,`creator`)" " VALUES (%s, %s, %s);")
-        insert_mysql_data = (ip, hostname, creator)
+        insert_mysql_data = (ip, hostname, creater)
         try:
             cur.execute(insert_mysql, insert_mysql_data)
             # 提交
@@ -32,7 +32,7 @@ class IpHostNameInserInto:
         finally:
             db.close()
 
-    def FlumeInserInto(ip, hostname, creator):
+    def FlumeInserInto(ip, hostname, creater):
         # 2.插入操作
         db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'],
                              db=config['db'], port=config['port'], charset=config['charset'])
@@ -40,7 +40,7 @@ class IpHostNameInserInto:
         cur = db.cursor()
         insert_mysql = (
             "insert into bdg_agent_flume_host" " (`ip`,`hostname`,`creator`)" " VALUES (%s, %s, %s);")
-        insert_mysql_data = (ip, hostname, creator)
+        insert_mysql_data = (ip, hostname, creater)
         try:
             cur.execute(insert_mysql, insert_mysql_data)
             # 提交
