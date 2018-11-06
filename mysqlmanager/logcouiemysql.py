@@ -49,9 +49,9 @@ class log_couier_mysql:
             results = cur.fetchall()
             body = []
             for i in range(cur.rowcount):
-                body.append({'id': results[i][0], 'ip': results[i][1], 'hostname': results[i][2], 'creator': results[i][3]})
+                body.append({"id": results[i][0], "ip": results[i][1], "hostname": results[i][2], "creator": results[i][3]})
             """这里返回的是一个被字符串后的list"""
-            return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)
@@ -77,9 +77,9 @@ class log_couier_mysql:
             results = cur.fetchall()
             body = []
             for i in range(cur.rowcount):
-                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4]})
+                body.append({"id": results[i][0], "creator": results[i][1], "creator_time": results[i][2], "hostip": results[i][3], "hostname": results[i][4]})
             """这里返回的是一个被字符串后的list"""
-            return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)
@@ -104,10 +104,10 @@ class log_couier_mysql:
             results = cur.fetchall()
             body = []
             for i in range(cur.rowcount):
-                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4], 'errlogpath': results[i][5],
+                body.append({"id": results[i][0], "creator": results[i][1], "creator_time": results[i][2], "hostip": results[i][3], "hostname": results[i][4], "errlogpath": results[i][5],
                              "logpath": results[i][6], "type": results[i][7], "output": results[i][8]})
             """这里返回的是一个被字符串后的list"""
-            return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)

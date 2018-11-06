@@ -73,9 +73,9 @@ class flume_mysql:
             results = cur.fetchall()
             body = []
             for i in range(cur.rowcount):
-                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4]})
+                body.append({"id": results[i][0], "creator": results[i][1], "creator_time": results[i][2], "hostip": results[i][3], "hostname": results[i][4]})
             """这里返回的是一个被字符串后的list"""
-            return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)
@@ -100,10 +100,10 @@ class flume_mysql:
             results = cur.fetchall()
             body = []
             for i in range(cur.rowcount):
-                body.append({'id': results[i][0], 'creator': results[i][1], 'creator_time': results[i][2], 'hostip': results[i][3], 'hostname': results[i][4], 'logpath': results[i][5],
+                body.append({"id": results[i][0], "creator": results[i][1], "creator_time": results[i][2], "hostip": results[i][3], "hostname": results[i][4], "logpath": results[i][5],
                              "groups": results[i][6], "flumeserversource": results[i][7], "flumelogdir": results[i][8], "output": results[i][9]})
             """这里返回的是一个被字符串后的list"""
-            return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)

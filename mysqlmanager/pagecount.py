@@ -20,7 +20,8 @@ def Select_MysqlCount(tablename, pagesize):
     select_mysql_data = (tablename)
     try:
         cur.execute(select_mysql, select_mysql_data)
-        pagenum = int(int(cur.rowcount) / int(pagesize))
+        pagenum = round(int(cur.rowcount) / int(pagesize))
+        """此处可能有个bug，是python3.X中round得bug"""
         return pagenum
     except Exception as e:
         # 错误回滚

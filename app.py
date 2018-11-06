@@ -5,6 +5,11 @@
 # @Site    :
 # @File    :
 # @Software: PyCharm
+"""
+成功code就是200
+一般信息就是message
+数据库信息就是data
+"""
 from flask import Flask, render_template, jsonify, redirect, request, url_for, flash
 from profilemanager import logcreate
 from profilemanager import flumecreate
@@ -26,8 +31,11 @@ import redis
 r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
 """
 """采用以下的方法做连接资源池"""
-pool = redis.ConnectionPool(host='127.0.0.1', port=6379, decode_responses=True, max_connections=10000)
+pool = redis.ConnectionPool(host='127.0.0.1', port=6379, decode_responses=True, max_connections=10000, password='password')
 r = redis.Redis(connection_pool=pool)
+"""因为使用线上codis，所以必须遵循线上codis的规则"""
+rediskeyheadr = "search:bdg:agent:"
+
 
 app = Flask(__name__)
 """定义一些全局使用的"""
@@ -70,14 +78,14 @@ def ldap_login():
     if username in User and data[0]:
         """返回10086状态码，显示全网页"""
         try:
-            r.set(username, userID, ex=36000)
+            r.set(rediskeyheadr + username, userID, ex=36000)
             """只有成功的才会被保留再session中"""
             session['username'] = username
             """session为永久，过期时间为10小时，跟redis内session保持一致"""
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=10)
             return jsonify({"code": 10086,
-                           "username": data[3]})
+                           "message": data[3]})
         except Exception as e:
             logerr.logger.error(e)
             return jsonify(e)
@@ -85,14 +93,14 @@ def ldap_login():
     elif data[0]:
         """返回10000状态码，只显示rd具有的网页,data[3]为登陆显示"""
         try:
-            r.set(username, userID, ex=36000)
+            r.set(rediskeyheadr + username, userID, ex=36000)
             """只有成功的才会被保留再session中"""
             session['username'] = username
             """session为永久，过期时间为10小时，跟redis内session保持一致"""
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=10)
             return jsonify({"code": 10000,
-                            "username": data[3]})
+                            "message": data[3]})
         except Exception as e:
             logerr.logger.error(e)
             return jsonify(e)
@@ -105,13 +113,13 @@ def ldap_login():
 """装饰器，拦截器"""
 def login_required(func):
     def one(*args, **kwargs):
-        if not r.get(session.get('username')):
+        if not r.get(rediskeyheadr + session.get('username')):
             try:
                 session.pop('username')
             except Exception as e:
                 logerr.logger.error(e)
             return jsonify({"code": 699,
-                            "message": "账号无效或权限过期，请重新登陆"})
+                            "message": "未授权或权限过期，请重新登陆"})
         """普通的装饰器不用这样写，flask的装饰器必须要这种格式"""
         return func(*args, **kwargs)
     return one
@@ -161,7 +169,7 @@ def Tomcat_err():
         """记录日志"""
         loginfo.logger.info("配置管理Tomcat" + " " + Tomcat_errLogPath + " " + Tomcat_errLogType + " " + Tomcat_errLogHost + " " + Tomcat_errLogHostName + " " + jincheng)
         return jsonify({"code": 200,
-                        "output": str(jincheng)})
+                        "message": str(jincheng)})
 
 
 
@@ -211,7 +219,7 @@ def Nginx_access():
         """记录日志"""
         loginfo.logger.info("配置管理nginx" + " " + Nginx_accessLogPath + " " + Nginx_accessLogType + " " + Nginx_accessLogHost + " " + Nginx_accessLogHostName + " " + jincheng)
         return jsonify({"code": 200,
-                        "output": str(jincheng)})
+                        "message": str(jincheng)})
 
 """配置管理flume路由"""
 @app.route('/profilemanager/flumeprofiler/', methods=['POST'])
@@ -276,7 +284,7 @@ def Flume():
         """记录日志"""
         loginfo.logger.info("配置管理flume" + " " + FlumeWeb_FilePath + " " + FlumeWeb_FileGroups + " " + FlumeWeb_LogDirStr + " " + FlumeWeb_LogHost + " " + FlumeWeb_LogHostName + " " + jincheng)
         return jsonify({"code": 200,
-                        "output": str(jincheng)})
+                        "message": str(jincheng)})
 
 
 """服务管理logcouier管理"""
@@ -285,11 +293,16 @@ def Flume():
 @login_required
 def ServerLogcouier(LogCouierPageNo):
     LogCouierPage_NO = LogCouierPageNo
+    if LogCouierPage_NO is None:
+        LogCouierPage_NO = 1
     if __name__ == '__main__':
         LogCouierPage_Num = PageCount(tablename='bdg_agent_logcouier_host', pagesize=Page_Size)
         LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_hostip(pageNo=LogCouierPage_NO, pagesize=Page_Size)
-        return jsonify({'pagenum': LogCouierPage_Num,
-                        'message': LogCouierSelect_Data})
+        return jsonify({"pagenum": LogCouierPage_Num,
+                        "data": LogCouierSelect_Data,
+                        "code": 200})
+
+
 
 """服务管理logcouier状态启动"""
 @app.route('/servermanager/logcouier/detailed/<STATUS>/',methods=['POST'])
@@ -306,7 +319,7 @@ def ServerLogcouierStatus(STATUS):
         elif STATUS == str('restart'):
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierRestart.yml"])
         return jsonify({"code": 200,
-                        "output": str(jincheng)})
+                        "message": str(jincheng)})
 
 
 """服务管理flume管理"""
@@ -315,18 +328,22 @@ def ServerLogcouierStatus(STATUS):
 @login_required
 def ServerFlume(FlumePageNo):
     FlumePage_NO = FlumePageNo
+    if FlumePage_NO is None:
+        FlumePage_NO = 1
     if __name__ == '__main__':
         FlumePage_Num = PageCount(tablename='bdg_agent_flume_host', pagesize=Page_Size)
         FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_hostip(pageNo=FlumePage_NO, pagesize=Page_Size)
-        return jsonify({'pagenum': FlumePage_Num,
-                        'message': FlumeSelect_Data})
+        return jsonify({"pagenum": FlumePage_Num,
+                        "data": FlumeSelect_Data,
+                        "code": 200})
+
 
 """服务管理flume状态启动"""
 @app.route('/servermanager/flume/detailed/<STATUS>/', methods=['POST'])
 @login_required
 def ServerFlumeStatus(STATUS):
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
-    Flume_IP = request.form['FLumeIP']
+    Flume_IP = request.form['FLume_IP']
     Flume_IP_List = Flume_IP.split(",")
     if __name__ == 'main':
         abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
@@ -335,7 +352,7 @@ def ServerFlumeStatus(STATUS):
         elif STATUS == str('restart'):
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf restart flume'"])
         return jsonify({"code": 200,
-                        "output": str(jincheng)})
+                        "message": str(jincheng)})
 
 """服务管理工单"""
 """logcouier一级菜单"""
@@ -343,22 +360,31 @@ def ServerFlumeStatus(STATUS):
 @login_required
 def ServerLogCouierSheet(LogCouierPageNo):
     LogCouier_PageNo = LogCouierPageNo
+    if LogCouier_PageNo is None:
+        LogCouier_PageNo = 1
     if __name__ == 'main':
         LogCouier_PageNum = PageCount(tablename='bdg_agent_logcouier_sheet', pagesize=Page_Size)
         LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_sample_sheet(pageNo=LogCouier_PageNo, pagesize=Page_Size)
         return jsonify({"pagenum": LogCouier_PageNum,
-                        "message": LogCouierSelect_Data})
+                        "data": LogCouierSelect_Data,
+                        "code": 200})
+
 
 """flume的一级菜单"""
 @app.route('/servermanager/flume/sheet/<FlumePageNo>', methods=['POST'])
 @login_required
 def ServerFlumeSheet(FlumePageNo):
     Flume_PageNo = FlumePageNo
+    if Flume_PageNo is None:
+        Flume_PageNo = 1
     if __name__ == 'main':
         Flume_PageNum = PageCount(tablename='bdg_agent_flume_sheet', pagesize=Page_Size)
         FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_sample_sheet(pageNo=Flume_PageNo, pagesize=Page_Size)
         return jsonify({"pagenum": Flume_PageNum,
-                        "message": FlumeSelect_Data})
+                        "data": FlumeSelect_Data,
+                        "code": 200})
+
+
 
 """服务管理工单详情"""
 """logcouier二级菜单"""
@@ -368,7 +394,8 @@ def ServerLogcouierSheetLoad(id):
     ID = id
     if __name__ == 'main':
         LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_all_sheet(id=ID)
-        return jsonify({"message": LogCouierSelect_Data})
+        return jsonify({"data": LogCouierSelect_Data,
+                        "code": 200})
 
 """flume的二级菜单"""
 @app.route('/servermanager/flume/sheet/detailed/<id>/', methods=['POST'])
@@ -377,7 +404,8 @@ def ServerFlumeSheetLoad(id):
     ID = id
     if __name__ == 'main':
         FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_all_sheet(id=ID)
-        return jsonify({"message": FlumeSelect_Data})
+        return jsonify({"data": FlumeSelect_Data,
+                        "code": 200})
 
 
 
@@ -417,11 +445,14 @@ def RdRequirement():
 def RdRequirementSheet(pageNo):
     """此处默认必须是第一页"""
     RdPageNO = pageNo
+    if RdPageNO is None:
+        RdPageNO = 1
     if __name__ == 'main':
         RdPage_Num = PageCount(tablename='bdg_agent_rd_sheet', pagesize=Page_Size)
         Rd_Data = rdmysql.rd_mysql.SelectInto(pageNo=RdPageNO, pagesize=Page_Size)
         return jsonify({"pagenum": RdPage_Num,
-                        "message": Rd_Data})
+                        "data": Rd_Data,
+                        "code": 200})
 """需求单详细页面"""
 @app.route('/rd/requiremensheet/detailed/<id>', methods=['POST'])
 @login_required
@@ -429,7 +460,8 @@ def RdRequirementSheetLoad(id):
     ID = id
     if __name__ == 'main':
         RdSelect_Data = rdmysql.rd_mysql.Select_rd_all_sheet(id=ID)
-        return jsonify({"message": RdSelect_Data})
+        return jsonify({"data": RdSelect_Data,
+                        "code": 200})
 
 
 
@@ -440,8 +472,9 @@ def RdRequirementSheetLoad(id):
 @login_required
 def logout():
     try:
-        r.delete(session.get('username'))
+        r.delete(rediskeyheadr + session.get('username'))
         session.pop('username')
+        return jsonify({"code": 200})
     except Exception as e:
         logerr.logger.error(e)
 
@@ -453,7 +486,7 @@ def queren(id):
     ID = id
     if __name__ == 'main':
         rdmysql.rd_mysql.Update_rd_all_sheet(id=ID)
-        return jsonify({"message": "ok"})
+        return jsonify({"code": 200})
 
 if __name__ == '__main__':
     app.run(debug=True, port=10000, host='0.0.0.0')
