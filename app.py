@@ -60,9 +60,25 @@ def send_async_email(app, msg):
 
 """定义session key值 secret_key：密钥。这个是必须的，如果没有配置 secret_key 就直接使用 session 会报错"""
 app.secret_key = 'Z&ugQh7oSN3k!XOR%tBT'
+"""op跟大数据的人员控制"""
+User = ['zhangliyuan01', 'chenbixia', 'jialiyang', 'yangyakun', 'zhangpeng', 'zhuxingtao', 'zhangxiaolong', 'wanglei01','wangfan01', 'quxiyang']
 @app.route('/')
 def hello_world():
     return 'Hello World! l ala'
+
+"""拦截器，用户已经登陆过，但是关闭浏览器，但是session没有过期的情况"""
+@app.route('/beforelogin', methods=['POST'])
+def before_login():
+    if not r.get(rediskeyheadr + session.get('username')):
+        return jsonify({"code": 1301,
+                        "message": "未登录请返回到登陆页面"})
+    else:
+        """如果在session会话内，就应该直接转到相应的页面"""
+        if session.get('username') in User:
+            return jsonify({"code": 10086,
+                            "message": session.get('username')})
+        return jsonify({"code": 10000,
+                        "message": session.get('username')})
 
 """ldap认证"""
 @app.route('/login', methods=['POST'])
@@ -73,8 +89,6 @@ def ldap_login():
     """进行ldap验证"""
     data = LDAP(username=username, password=password)
     userID = data[3]
-    """op跟大数据的人员控制"""
-    User = ['zhangliyuan01', 'chenbixia', 'jialiyang', 'yangyakun', 'zhangpeng', 'zhuxingtao', 'zhangxiaolong', 'wanglei01', 'wangfan01', 'quxiyang']
     if username in User and data[0]:
         """返回10086状态码，显示全网页"""
         try:
@@ -110,7 +124,7 @@ def ldap_login():
         return jsonify({"code": 599,
                         "message": "账号或者密码错误，请重新登陆"})
 
-"""装饰器，拦截器"""
+"""装饰器，拦截器，已经登陆的拦截器"""
 def login_required(func):
     def one(*args, **kwargs):
         if not r.get(rediskeyheadr + session.get('username')):
@@ -487,6 +501,7 @@ def queren(id):
     if __name__ == 'main':
         rdmysql.rd_mysql.Update_rd_all_sheet(id=ID)
         return jsonify({"code": 200})
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=10000, host='0.0.0.0')
