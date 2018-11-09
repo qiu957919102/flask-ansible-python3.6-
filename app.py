@@ -31,7 +31,7 @@ import redis
 r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
 """
 """采用以下的方法做连接资源池"""
-pool = redis.ConnectionPool(host='127.0.0.1', port=6379, decode_responses=True, max_connections=10000, password='password')
+pool = redis.ConnectionPool(host='172.16.14.5', port=19000, decode_responses=True, max_connections=10000, password='rXrZK1qGt1c8ie2:BaiJiaHuLian0922')
 r = redis.Redis(connection_pool=pool)
 """因为使用线上codis，所以必须遵循线上codis的规则"""
 rediskeyheadr = "search:bdg:agent:"

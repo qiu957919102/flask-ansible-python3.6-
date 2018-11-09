@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fb73fb17-0991-4e2c-aada-1604e27e4e8b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -77,6 +76,7 @@
           <entry key="config" value="1" />
           <entry key="flumeweiba" value="3" />
           <entry key="html" value="24" />
+          <entry key="js" value="1" />
           <entry key="py" value="189" />
           <entry key="pyi" value="2" />
           <entry key="sh" value="1" />
@@ -89,6 +89,7 @@
         <counts>
           <entry key="HTML" value="24" />
           <entry key="Ini" value="1" />
+          <entry key="JavaScript" value="1" />
           <entry key="PLAIN_TEXT" value="21" />
           <entry key="Python" value="189" />
           <entry key="PythonStub" value="2" />
@@ -122,11 +123,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="617">
-              <caret line="118" column="34" lean-forward="true" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
+            <state relative-caret-position="237">
+              <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
               <folding>
                 <marker date="1541658087980" expanded="true" signature="4847:4851" ph="..." />
                 <marker date="1541658087980" expanded="true" signature="22438:22570" ph="..." />
@@ -135,18 +136,27 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/dist/common/util/env.js">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/login/ldap.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="408">
-              <caret line="24" column="28" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="43" />
+              <caret line="24" column="28" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mysqlmanager/configs.py">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="10" column="64" selection-start-line="10" selection-start-column="64" selection-end-line="10" selection-end-column="64" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -307,17 +317,7 @@
             <path>
               <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
               <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
-              <item name="login" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
-              <item name="mysqlmanager" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
-              <item name="profilemanager" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -620,7 +620,14 @@
       <option name="project" value="LOCAL" />
       <updated>1541476262689</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="最终版">
+      <created>1541658365589</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1541658365589</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -634,7 +641,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1541555" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -710,7 +716,8 @@
     <MESSAGE value="全部功能上线，自建ldap跟邮件功能,有些词语写错并修改版" />
     <MESSAGE value="全部功能上线，并增加rd工单确认按钮，增加登出功能" />
     <MESSAGE value="可能是最终版" />
-    <option name="LAST_COMMIT_MESSAGE" value="可能是最终版" />
+    <MESSAGE value="最终版" />
+    <option name="LAST_COMMIT_MESSAGE" value="最终版" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -724,7 +731,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/login/flask-ldap2.py" />
     <entry file="file://$PROJECT_DIR$/login2/__init__.py" />
     <entry file="file://$PROJECT_DIR$/login2/login.py" />
     <entry file="file://$PROJECT_DIR$/login/flask-ldap.py" />
@@ -857,9 +863,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mysqlmanager/configs.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/mysqlmanager/flumemysql.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="570">
@@ -901,20 +904,30 @@
     <entry file="file://$PROJECT_DIR$/login/ldap.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
-          <caret line="24" column="28" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="43" />
+          <caret line="24" column="28" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysqlmanager/configs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="10" column="64" selection-start-line="10" selection-start-column="64" selection-end-line="10" selection-end-column="64" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="617">
-          <caret line="118" column="34" lean-forward="true" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
+        <state relative-caret-position="237">
+          <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
           <folding>
             <marker date="1541658087980" expanded="true" signature="4847:4851" ph="..." />
             <marker date="1541658087980" expanded="true" signature="22438:22570" ph="..." />
           </folding>
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/dist/common/util/env.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
