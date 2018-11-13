@@ -142,7 +142,6 @@ def login_required(func):
 
 """配置管理logcouier中Tomcaterr路由"""
 @app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
-@login_required
 def Tomcat_err():
     creater = session.get('username')
     Tomcatcreate = logcreate.LogProfile.TomcatErr
@@ -193,7 +192,6 @@ def Tomcat_err():
 
 """配置管理logcouier中nginxacces路由"""
 @app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
-@login_required
 def Nginx_access():
     creater = session.get('username')
     Nginxcreate = logcreate.LogProfile.NginxAccess
@@ -237,7 +235,6 @@ def Nginx_access():
 
 """配置管理flume路由"""
 @app.route('/profilemanager/flumeprofiler/', methods=['POST'])
-@login_required
 def Flume():
     creater = session.get('username')
     FlumeWeb = flumecreate.FlumeProfileCreate
@@ -304,7 +301,6 @@ def Flume():
 """服务管理logcouier管理"""
 """一：logcouier所在机器"""
 @app.route('/servermanager/logcouier/<LogCouierPageNo>', methods=['POST'])
-@login_required
 def ServerLogcouier(LogCouierPageNo):
     LogCouierPage_NO = LogCouierPageNo
     if LogCouierPage_NO is None:
@@ -320,7 +316,6 @@ def ServerLogcouier(LogCouierPageNo):
 
 """服务管理logcouier状态启动"""
 @app.route('/servermanager/logcouier/detailed/<STATUS>/',methods=['POST'])
-@login_required
 def ServerLogcouierStatus(STATUS):
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     LogCouier_IP = request.form('LogCouier_IP')
@@ -339,7 +334,6 @@ def ServerLogcouierStatus(STATUS):
 """服务管理flume管理"""
 """一：flume所在机器"""
 @app.route('/servermanager/flume/<FlumePageNo>', methods=['POST'])
-@login_required
 def ServerFlume(FlumePageNo):
     FlumePage_NO = FlumePageNo
     if FlumePage_NO is None:
@@ -354,7 +348,6 @@ def ServerFlume(FlumePageNo):
 
 """服务管理flume状态启动"""
 @app.route('/servermanager/flume/detailed/<STATUS>/', methods=['POST'])
-@login_required
 def ServerFlumeStatus(STATUS):
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     Flume_IP = request.form['FLume_IP']
@@ -371,7 +364,6 @@ def ServerFlumeStatus(STATUS):
 """服务管理工单"""
 """logcouier一级菜单"""
 @app.route('/servermanager/logcouier/sheet/<LogCouierPageNo>', methods=['POST'])
-@login_required
 def ServerLogCouierSheet(LogCouierPageNo):
     LogCouier_PageNo = LogCouierPageNo
     if LogCouier_PageNo is None:
@@ -386,7 +378,6 @@ def ServerLogCouierSheet(LogCouierPageNo):
 
 """flume的一级菜单"""
 @app.route('/servermanager/flume/sheet/<FlumePageNo>', methods=['POST'])
-@login_required
 def ServerFlumeSheet(FlumePageNo):
     Flume_PageNo = FlumePageNo
     if Flume_PageNo is None:
@@ -403,7 +394,6 @@ def ServerFlumeSheet(FlumePageNo):
 """服务管理工单详情"""
 """logcouier二级菜单"""
 @app.route('/servermanager/logcouier/sheet/detailed/<id>/', methods=['POST'])
-@login_required
 def ServerLogcouierSheetLoad(id):
     ID = id
     if __name__ == 'main':
@@ -413,7 +403,6 @@ def ServerLogcouierSheetLoad(id):
 
 """flume的二级菜单"""
 @app.route('/servermanager/flume/sheet/detailed/<id>/', methods=['POST'])
-@login_required
 def ServerFlumeSheetLoad(id):
     ID = id
     if __name__ == 'main':
@@ -425,7 +414,6 @@ def ServerFlumeSheetLoad(id):
 
 """需求单"""
 @app.route('/rd/requirement/', methods=['POST'])
-@login_required
 def RdRequirement():
     creater = session.get('username')
     """多个项目会分割会在数据库中分割成多条记录，通过时间戳来判断是同一个工单"""
@@ -455,7 +443,6 @@ def RdRequirement():
                         "message": "已经通知op"})
 """需求单工单"""''
 @app.route('/rd/requiremensheet/<pageNo>')
-@login_required
 def RdRequirementSheet(pageNo):
     """此处默认必须是第一页"""
     RdPageNO = pageNo
@@ -469,7 +456,6 @@ def RdRequirementSheet(pageNo):
                         "code": 200})
 """需求单详细页面"""
 @app.route('/rd/requiremensheet/detailed/<id>', methods=['POST'])
-@login_required
 def RdRequirementSheetLoad(id):
     ID = id
     if __name__ == 'main':
@@ -483,7 +469,6 @@ def RdRequirementSheetLoad(id):
 
 """登出页面"""
 @app.route('/logout', methods=['POST'])
-@login_required
 def logout():
     try:
         r.delete(rediskeyheadr + session.get('username'))
@@ -495,7 +480,6 @@ def logout():
 
 """op/bdg确认rd工单处理按钮"""
 @app.route('/queren/<id>', methods=['POST'])
-@login_required
 def queren(id):
     ID = id
     if __name__ == 'main':
