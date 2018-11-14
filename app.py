@@ -439,15 +439,15 @@ def RdRequirement():
     """RdTime = int(round(time.time() * 1000))"""
     rdmysql.rd_mysql.InserInto(creater=creater, project=RdProject, errlogpath=RdErrlogPath, logpath=RdLogPath, hostip=RdHostIp, notify=RdNotify)
     """记录日志"""
-    loginfo.logger.info("rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ "+ "在哪些主机上:" + RdHostIp + "/ " + "需要通知的人：" + RdNotify)
+    loginfo.logger.info("rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ " + "在哪些主机上:" + RdHostIp + "/ " + "需要通知的人：" + RdNotify)
     """邮件服务"""
-    msg = Message("Rd新需求单", recipients=["op@baijiahulian.com"])
+    msg = Message("Bdg_agent_Rd新需求单", recipients=["op@baijiahulian.com"])
     msg.add_recipient("bdg-agent.baijiahulian.com")
     msg.body = "rd需求单记录" + " " + "项目名：" + RdProject + "/ " + "错误日志路径：" + RdErrlogPath + "/ " + "api日志路径：" + RdLogPath + "/ " + "在哪些主机上:" + RdHostIp + "/ " + "需要通知的人：" + RdNotify + " " + "详情请到工单系统中查询"
     """异步发邮件"""
     thr = threading.Thread(target=send_async_email, args=[app, msg])
     thr.start()
-    return jsonify({"code": 200, "message": "已经通知op"})
+    return jsonify({"code": 200, "message": "已经邮件通知业务方"})
 """需求单工单"""''
 @app.route('/rd/requiremensheet/<pageNo>', methods=['POST'])
 @login_required

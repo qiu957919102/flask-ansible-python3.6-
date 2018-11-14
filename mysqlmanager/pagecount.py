@@ -9,6 +9,7 @@
 import pymysql
 from servicelog import loginfo, logerr
 from mysqlmanager import configs
+import math
 config = configs.configs
 
 def Select_MysqlCount(tablename, pagesize):
@@ -20,7 +21,7 @@ def Select_MysqlCount(tablename, pagesize):
         sql = "select id from " + tablename + ";"
         sql = sql.replace('\'', '')
         cur.execute(sql)
-        pagenum = round(int(cur.rowcount) / int(pagesize))
+        pagenum = math.ceil(int(cur.rowcount) / int(pagesize))
         """此处可能有个bug，是python3.X中round得bug"""
         return pagenum
     except Exception as e:
