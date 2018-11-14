@@ -69,16 +69,26 @@ def hello_world():
 """拦截器，用户已经登陆过，但是关闭浏览器，但是session没有过期的情况"""
 @app.route('/beforelogin', methods=['POST'])
 def before_login():
-    if not r.get(rediskeyheadr + session.get('username')):
-        return jsonify({"code": 1301,
-                        "message": "未登录请返回到登陆页面"})
-    else:
-        """如果在session会话内，就应该直接转到相应的页面"""
-        if session.get('username') in User:
-            return jsonify({"code": 10086,
+    try:
+        if session.get('usernmae') == True:
+            if not r.get(rediskeyheadr + session.get('username')):
+                return jsonify({"code": 1301,
+                                "message": "未登录请返回到登陆页面"})
+            else:
+                """如果在session会话内，就应该直接转到相应的页面"""
+                if session.get('username') in User:
+                    return jsonify({"code": 10086,
+                                    "message": session.get('username')})
+                return jsonify({"code": 10000,
+                                "message": session.get('username')})
+        else:
+            return jsonify({"code": 10000,
                             "message": session.get('username')})
+    except Exception as e:
         return jsonify({"code": 10000,
                         "message": session.get('username')})
+
+
 
 """ldap认证"""
 @app.route('/login', methods=['POST'])
@@ -89,35 +99,36 @@ def ldap_login():
     """进行ldap验证"""
     data = LDAP(username=username, password=password)
     userID = data[3]
-    if username in User and data[0]:
-        """返回10086状态码，显示全网页"""
-        try:
-            r.set(rediskeyheadr + username, userID, ex=36000)
-            """只有成功的才会被保留再session中"""
-            session['username'] = username
-            """session为永久，过期时间为10小时，跟redis内session保持一致"""
-            session.permanent = True
-            app.permanent_session_lifetime = timedelta(hours=10)
-            return jsonify({"code": 10086,
-                           "message": data[3]})
-        except Exception as e:
-            logerr.logger.error(e)
-            return jsonify(e)
+    if userID != "":
+        if username in User:
+            redisusername = rediskeyheadr + username
+            """返回10086状态码，显示全网页"""
+            try:
+                r.set(redisusername, userID, ex=36000)
+                """只有成功的才会被保留再session中"""
+                session['username'] = username
+                """session为永久，过期时间为10小时，跟redis内session保持一致"""
+                session.permanent = True
+                app.permanent_session_lifetime = timedelta(hours=10)
+                return jsonify({"code": 10086,
+                               "message": data[3]})
+            except Exception as e:
+                logerr.logger.error(e)
 
-    elif data[0]:
-        """返回10000状态码，只显示rd具有的网页,data[3]为登陆显示"""
-        try:
-            r.set(rediskeyheadr + username, userID, ex=36000)
-            """只有成功的才会被保留再session中"""
-            session['username'] = username
-            """session为永久，过期时间为10小时，跟redis内session保持一致"""
-            session.permanent = True
-            app.permanent_session_lifetime = timedelta(hours=10)
-            return jsonify({"code": 10000,
-                            "message": data[3]})
-        except Exception as e:
-            logerr.logger.error(e)
-            return jsonify(e)
+        else:
+            redisusername = rediskeyheadr + username
+            """返回10000状态码，只显示rd具有的网页,data[3]为登陆显示"""
+            try:
+                r.set(redisusername, userID, ex=36000)
+                """只有成功的才会被保留再session中"""
+                session['username'] = username
+                """session为永久，过期时间为10小时，跟redis内session保持一致"""
+                session.permanent = True
+                app.permanent_session_lifetime = timedelta(hours=10)
+                return jsonify({"code": 10000,
+                                "message": data[3]})
+            except Exception as e:
+                logerr.logger.error(e)
     else:
         """前端接到699后，会跳转到login页面"""
         """前端接到599，表示密码错误，跳转到login页面"""
@@ -303,10 +314,8 @@ def Flume():
 @app.route('/servermanager/logcouier/<LogCouierPageNo>', methods=['POST'])
 def ServerLogcouier(LogCouierPageNo):
     LogCouierPage_NO = LogCouierPageNo
-    if LogCouierPage_NO is None:
-        LogCouierPage_NO = 1
     if __name__ == '__main__':
-        LogCouierPage_Num = PageCount(tablename='bdg_agent_logcouier_host', pagesize=Page_Size)
+        LogCouierPage_Num = PageCount(tablename="bdg_agent_logcouier_host", pagesize=Page_Size)
         LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_hostip(pageNo=LogCouierPage_NO, pagesize=Page_Size)
         return jsonify({"pagenum": LogCouierPage_Num,
                         "data": LogCouierSelect_Data,
@@ -315,20 +324,26 @@ def ServerLogcouier(LogCouierPageNo):
 
 
 """服务管理logcouier状态启动"""
-@app.route('/servermanager/logcouier/detailed/<STATUS>/',methods=['POST'])
-def ServerLogcouierStatus(STATUS):
+@app.route('/servermanager/logcouier/detailed/',methods=['POST'])
+def ServerLogcouierStatus():
+    status = request.form['STATUS']
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
-    LogCouier_IP = request.form('LogCouier_IP')
+    LogCouier_IP = request.form['LogCouier_IP']
     """逗号分割"""
     LogCouier_IP_List = LogCouier_IP.split(",")
     if __name__ == 'main':
         abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/LogCourier_hosts', varhostip=LogCouier_IP_List)
-        if STATUS == str('stop'):
+        if status == str('stop'):
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierStop.yml"])
-        elif STATUS == str('restart'):
+            return jsonify({"code": 200,
+                            "message": str(jincheng)})
+        elif status == str('restart'):
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierRestart.yml"])
-        return jsonify({"code": 200,
+            return jsonify({"code": 200,
                         "message": str(jincheng)})
+        else:
+            return jsonify({"code": 201,
+                            "message": "错误"})
 
 
 """服务管理flume管理"""
@@ -336,10 +351,8 @@ def ServerLogcouierStatus(STATUS):
 @app.route('/servermanager/flume/<FlumePageNo>', methods=['POST'])
 def ServerFlume(FlumePageNo):
     FlumePage_NO = FlumePageNo
-    if FlumePage_NO is None:
-        FlumePage_NO = 1
     if __name__ == '__main__':
-        FlumePage_Num = PageCount(tablename='bdg_agent_flume_host', pagesize=Page_Size)
+        FlumePage_Num = PageCount(tablename="bdg_agent_flume_host", pagesize=Page_Size)
         FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_hostip(pageNo=FlumePage_NO, pagesize=Page_Size)
         return jsonify({"pagenum": FlumePage_Num,
                         "data": FlumeSelect_Data,
@@ -347,29 +360,33 @@ def ServerFlume(FlumePageNo):
 
 
 """服务管理flume状态启动"""
-@app.route('/servermanager/flume/detailed/<STATUS>/', methods=['POST'])
-def ServerFlumeStatus(STATUS):
+@app.route('/servermanager/flume/detailed/', methods=['POST'])
+def ServerFlumeStatus():
+    status = request.form['STATUS']
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     Flume_IP = request.form['FLume_IP']
     Flume_IP_List = Flume_IP.split(",")
     if __name__ == 'main':
         abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
-        if STATUS == str('stop'):
+        if status == str('stop'):
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf stop flume'"])
-        elif STATUS == str('restart'):
+            return jsonify({"code": 200,
+                            "message": str(jincheng)})
+        elif status == str('restart'):
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf restart flume'"])
-        return jsonify({"code": 200,
+            return jsonify({"code": 200,
                         "message": str(jincheng)})
+        else:
+            return jsonify({"code": 201,
+                            "message": "错误"})
 
 """服务管理工单"""
 """logcouier一级菜单"""
 @app.route('/servermanager/logcouier/sheet/<LogCouierPageNo>', methods=['POST'])
 def ServerLogCouierSheet(LogCouierPageNo):
     LogCouier_PageNo = LogCouierPageNo
-    if LogCouier_PageNo is None:
-        LogCouier_PageNo = 1
     if __name__ == 'main':
-        LogCouier_PageNum = PageCount(tablename='bdg_agent_logcouier_sheet', pagesize=Page_Size)
+        LogCouier_PageNum = PageCount(tablename="bdg_agent_logcouier_sheet", pagesize=Page_Size)
         LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_sample_sheet(pageNo=LogCouier_PageNo, pagesize=Page_Size)
         return jsonify({"pagenum": LogCouier_PageNum,
                         "data": LogCouierSelect_Data,
@@ -380,10 +397,8 @@ def ServerLogCouierSheet(LogCouierPageNo):
 @app.route('/servermanager/flume/sheet/<FlumePageNo>', methods=['POST'])
 def ServerFlumeSheet(FlumePageNo):
     Flume_PageNo = FlumePageNo
-    if Flume_PageNo is None:
-        Flume_PageNo = 1
     if __name__ == 'main':
-        Flume_PageNum = PageCount(tablename='bdg_agent_flume_sheet', pagesize=Page_Size)
+        Flume_PageNum = PageCount(tablename="bdg_agent_flume_sheet", pagesize=Page_Size)
         FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_sample_sheet(pageNo=Flume_PageNo, pagesize=Page_Size)
         return jsonify({"pagenum": Flume_PageNum,
                         "data": FlumeSelect_Data,
@@ -446,10 +461,8 @@ def RdRequirement():
 def RdRequirementSheet(pageNo):
     """此处默认必须是第一页"""
     RdPageNO = pageNo
-    if RdPageNO is None:
-        RdPageNO = 1
     if __name__ == 'main':
-        RdPage_Num = PageCount(tablename='bdg_agent_rd_sheet', pagesize=Page_Size)
+        RdPage_Num = PageCount(tablename="bdg_agent_rd_sheet", pagesize=Page_Size)
         Rd_Data = rdmysql.rd_mysql.SelectInto(pageNo=RdPageNO, pagesize=Page_Size)
         return jsonify({"pagenum": RdPage_Num,
                         "data": Rd_Data,

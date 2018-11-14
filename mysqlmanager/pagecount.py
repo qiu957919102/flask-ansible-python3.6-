@@ -16,10 +16,10 @@ def Select_MysqlCount(tablename, pagesize):
     db = pymysql.connect(host=config['host'], user=config['user'], password=config['password'], db=config['db'],
                          port=config['port'], charset=config['charset'])
     cur = db.cursor()
-    select_mysql = ("select id from %s")
-    select_mysql_data = (tablename)
     try:
-        cur.execute(select_mysql, select_mysql_data)
+        sql = "select id from " + tablename + ";"
+        sql = sql.replace('\'', '')
+        cur.execute(sql)
         pagenum = round(int(cur.rowcount) / int(pagesize))
         """此处可能有个bug，是python3.X中round得bug"""
         return pagenum
