@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fb73fb17-0991-4e2c-aada-1604e27e4e8b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" beforeDir="false" afterPath="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysqlmanager/pagecount.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysqlmanager/pagecount.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +79,7 @@
           <entry key="flumeweiba" value="3" />
           <entry key="html" value="25" />
           <entry key="js" value="1" />
-          <entry key="py" value="189" />
+          <entry key="py" value="193" />
           <entry key="pyi" value="2" />
           <entry key="sh" value="1" />
           <entry key="sql" value="1" />
@@ -93,7 +93,7 @@
           <entry key="Ini" value="1" />
           <entry key="JavaScript" value="1" />
           <entry key="PLAIN_TEXT" value="21" />
-          <entry key="Python" value="189" />
+          <entry key="Python" value="193" />
           <entry key="PythonStub" value="2" />
           <entry key="Scratch" value="1" />
           <entry key="XHTML" value="1" />
@@ -105,16 +105,16 @@
           <entry key="config" value="1" />
           <entry key="dummy" value="146" />
           <entry key="html" value="5" />
-          <entry key="py" value="27618" />
+          <entry key="py" value="27750" />
           <entry key="sh" value="25" />
-          <entry key="txt" value="740" />
+          <entry key="txt" value="743" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="HTML" value="5" />
-          <entry key="PLAIN_TEXT" value="912" />
-          <entry key="Python" value="27625" />
+          <entry key="PLAIN_TEXT" value="915" />
+          <entry key="Python" value="27757" />
           <entry key="SQL" value="6" />
         </counts>
       </usages-collector>
@@ -128,32 +128,39 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="380" column="45" selection-start-line="380" selection-start-column="45" selection-end-line="380" selection-end-column="45" />
+            <state relative-caret-position="522">
+              <caret line="371" column="40" lean-forward="true" selection-start-line="371" selection-start-column="40" selection-end-line="371" selection-end-column="40" />
               <folding>
-                <marker date="1542167246363" expanded="true" signature="5387:5391" ph="..." />
-                <marker date="1542167246363" expanded="true" signature="22888:23020" ph="..." />
+                <element signature="e#193#235#0" expanded="true" />
+                <marker date="1542175724962" expanded="true" signature="5075:5079" ph="..." />
+                <marker date="1542175724962" expanded="true" signature="22715:22847" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/login/ldap.py">
+        <entry file="file://$PROJECT_DIR$/ansiblemanager/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ansiblemanager/ansibleapiversion1.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="24" column="28" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="43" />
+            <state relative-caret-position="104">
+              <caret line="7" column="14" lean-forward="true" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mysqlmanager/configs.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" column="31" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="32" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/ansiblemanager/Hostcreateversion1.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -233,7 +240,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/start.sh" />
-        <option value="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" />
         <option value="$PROJECT_DIR$/login/login.py" />
         <option value="$PROJECT_DIR$/login.html" />
         <option value="$PROJECT_DIR$/login/login.html" />
@@ -282,6 +288,7 @@
         <option value="$PROJECT_DIR$/mysqlmanager/rdmysql.py" />
         <option value="$PROJECT_DIR$/mysqlmanager/configs.py" />
         <option value="$PROJECT_DIR$/mysqlmanager/pagecount.py" />
+        <option value="$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py" />
         <option value="$PROJECT_DIR$/app.py" />
       </list>
     </option>
@@ -310,6 +317,11 @@
             <path>
               <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
               <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bdg-baijiahulian.com" type="462c0819:PsiDirectoryNode" />
+              <item name="ansiblemanager" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bdg-baijiahulian.com" type="b2602c69:ProjectViewProjectNode" />
@@ -650,7 +662,21 @@
       <option name="project" value="LOCAL" />
       <updated>1542100151175</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="测试2">
+      <created>1542167282471</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1542167282472</updated>
+    </task>
+    <task id="LOCAL-00023" summary="测试3">
+      <created>1542170954802</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1542170954802</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -743,7 +769,9 @@
     <MESSAGE value="最终版" />
     <MESSAGE value="前后端整合后" />
     <MESSAGE value="测试1" />
-    <option name="LAST_COMMIT_MESSAGE" value="测试1" />
+    <MESSAGE value="测试2" />
+    <MESSAGE value="测试3" />
+    <option name="LAST_COMMIT_MESSAGE" value="测试3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -757,10 +785,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/login2/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/login2/login.py" />
-    <entry file="file://$PROJECT_DIR$/login/flask-ldap.py" />
-    <entry file="file://$PROJECT_DIR$/login/confi.py" />
     <entry file="file://$PROJECT_DIR$/login/app_login.py" />
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/flask_wtf/form.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -942,13 +966,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ansiblemanager/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ansiblemanager/Hostcreateversion1.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ansiblemanager/ansibleapiversion1.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ansiblemanager/ansiblevarscreateversion2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="7" column="14" lean-forward="true" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="380" column="45" selection-start-line="380" selection-start-column="45" selection-end-line="380" selection-end-column="45" />
+        <state relative-caret-position="522">
+          <caret line="371" column="40" lean-forward="true" selection-start-line="371" selection-start-column="40" selection-end-line="371" selection-end-column="40" />
           <folding>
-            <marker date="1542167246363" expanded="true" signature="5387:5391" ph="..." />
-            <marker date="1542167246363" expanded="true" signature="22888:23020" ph="..." />
+            <element signature="e#193#235#0" expanded="true" />
+            <marker date="1542175724962" expanded="true" signature="5075:5079" ph="..." />
+            <marker date="1542175724962" expanded="true" signature="22715:22847" ph="..." />
           </folding>
         </state>
       </provider>

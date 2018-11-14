@@ -6,7 +6,6 @@
 # @File    : 
 # @Software: PyCharm
 """用于创建ansibleplaybook vars里面变量"""
-import os
 """下面是针对配置管理（软件初始化）"""
 def ansiblepalybookvars(playbookvarsfilepath, playbookhost, varhostip, varmuluname):
     with open(playbookvarsfilepath, 'w+', encoding='utf-8') as f:

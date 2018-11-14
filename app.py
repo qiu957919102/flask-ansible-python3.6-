@@ -320,26 +320,24 @@ def ServerLogcouier(LogCouierPageNo):
 
 
 """服务管理logcouier状态启动"""
-@app.route('/servermanager/logcouier/detailed/',methods=['POST'])
-def ServerLogcouierStatus():
-    status = request.form['STATUS']
+@app.route('/servermanager/logcouier/detailed/<STATUS>',methods=['POST'])
+def ServerLogcouierStatus(STATUS):
+    status = STATUS
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     LogCouier_IP = request.form['LogCouier_IP']
     """逗号分割"""
     LogCouier_IP_List = LogCouier_IP.split(",")
-    if __name__ == 'main':
-        abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/LogCourier_hosts', varhostip=LogCouier_IP_List)
+    if status != "":
         if status == "stop":
+            abnvarcreatetwo(playbookhost="/etc/ansible/service_hosts/LogCourier_hosts", varhostip=LogCouier_IP_List)
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierStop.yml"])
-            return jsonify({"code": 200,
-                            "message": str(jincheng)})
+            return jsonify({"code": 200,"message": str(jincheng)})
         elif status == "restart":
+            abnvarcreatetwo(playbookhost="/etc/ansible/service_hosts/LogCourier_hosts", varhostip=LogCouier_IP_List)
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierRestart.yml"])
-            return jsonify({"code": 200,
-                        "message": str(jincheng)})
-        else:
-            return jsonify({"code": 201,
-                            "message": "错误"})
+            return jsonify({"code": 200,"message": str(jincheng)})
+        return jsonify({"code": 201, "message": "错误"})
+    return jsonify({"code": 201, "message": "错误"})
 
 
 """服务管理flume管理"""
@@ -362,19 +360,19 @@ def ServerFlumeStatus():
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     Flume_IP = request.form['FLume_IP']
     Flume_IP_List = Flume_IP.split(",")
-    if __name__ == 'main':
-        abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
+    if status != "":
         if status == "stop":
+            abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf stop flume'"])
             return jsonify({"code": 200,
                             "message": str(jincheng)})
         elif status == "restart":
+            abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf restart flume'"])
             return jsonify({"code": 200,
                         "message": str(jincheng)})
-        else:
-            return jsonify({"code": 201,
-                            "message": "错误"})
+        return jsonify({"code": 201, "message": "错误"})
+    return jsonify({"code": 201, "message": "错误"})
 
 """服务管理工单"""
 """logcouier一级菜单"""
@@ -480,7 +478,7 @@ def RdRequirementSheetLoad(id):
 @app.route('/logout', methods=['POST'])
 def logout():
     try:
-        r.delete(rediskeyheadr + session.get('username'))
+        r.delete(session.get('username'))
         session.pop('username')
         return jsonify({"code": 200})
     except Exception as e:
