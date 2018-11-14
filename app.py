@@ -10,7 +10,7 @@
 一般信息就是message
 数据库信息就是data
 """
-from flask import Flask, render_template, jsonify, redirect, request, url_for, flash
+from flask import Flask, jsonify, request
 from profilemanager import logcreate
 from profilemanager import flumecreate
 from ansiblemanager import ansiblevarscreateversion2
@@ -31,10 +31,8 @@ import redis
 r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
 """
 """采用以下的方法做连接资源池"""
-pool = redis.ConnectionPool(host='172.16.14.5', port=19000, decode_responses=True, max_connections=10000, password='rXrZK1qGt1c8ie2:BaiJiaHuLian0922')
+pool = redis.ConnectionPool(host='172.21.139.9', port=6379, decode_responses=True, max_connections=10000)
 r = redis.Redis(connection_pool=pool)
-"""因为使用线上codis，所以必须遵循线上codis的规则"""
-rediskeyheadr = "search:bdg:agent:"
 
 
 app = Flask(__name__)
@@ -71,7 +69,7 @@ def hello_world():
 def before_login():
     try:
         if session.get('usernmae') == True:
-            if not r.get(rediskeyheadr + session.get('username')):
+            if not r.get(session.get('username')):
                 return jsonify({"code": 1301,
                                 "message": "未登录请返回到登陆页面"})
             else:
@@ -84,7 +82,7 @@ def before_login():
         else:
             return jsonify({"code": 10000,
                             "message": session.get('username')})
-    except Exception as e:
+    except Exception:
         return jsonify({"code": 10000,
                         "message": session.get('username')})
 
@@ -101,10 +99,9 @@ def ldap_login():
     userID = data[3]
     if userID != "":
         if username in User:
-            redisusername = rediskeyheadr + username
             """返回10086状态码，显示全网页"""
             try:
-                r.set(redisusername, userID, ex=36000)
+                r.set(username, userID, ex=36000)
                 """只有成功的才会被保留再session中"""
                 session['username'] = username
                 """session为永久，过期时间为10小时，跟redis内session保持一致"""
@@ -116,10 +113,9 @@ def ldap_login():
                 logerr.logger.error(e)
 
         else:
-            redisusername = rediskeyheadr + username
             """返回10000状态码，只显示rd具有的网页,data[3]为登陆显示"""
             try:
-                r.set(redisusername, userID, ex=36000)
+                r.set(username, userID, ex=36000)
                 """只有成功的才会被保留再session中"""
                 session['username'] = username
                 """session为永久，过期时间为10小时，跟redis内session保持一致"""
@@ -138,7 +134,7 @@ def ldap_login():
 """装饰器，拦截器，已经登陆的拦截器"""
 def login_required(func):
     def one(*args, **kwargs):
-        if not r.get(rediskeyheadr + session.get('username')):
+        if not r.get(session.get('username')):
             try:
                 session.pop('username')
             except Exception as e:
@@ -333,11 +329,11 @@ def ServerLogcouierStatus():
     LogCouier_IP_List = LogCouier_IP.split(",")
     if __name__ == 'main':
         abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/LogCourier_hosts', varhostip=LogCouier_IP_List)
-        if status == str('stop'):
+        if status == "stop":
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierStop.yml"])
             return jsonify({"code": 200,
                             "message": str(jincheng)})
-        elif status == str('restart'):
+        elif status == "restart":
             jincheng = subprocess.getoutput(["ansible-playbook -i /etc/ansible/service_hosts/LogCourier_hosts --verbose /etc/ansible/service_playbook/ServiceLogCourierRestart.yml"])
             return jsonify({"code": 200,
                         "message": str(jincheng)})
@@ -368,11 +364,11 @@ def ServerFlumeStatus():
     Flume_IP_List = Flume_IP.split(",")
     if __name__ == 'main':
         abnvarcreatetwo(playbookhost='/etc/ansible/service_hosts/Flume_hosts', varhostip=Flume_IP_List)
-        if status == str('stop'):
+        if status == "stop":
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf stop flume'"])
             return jsonify({"code": 200,
                             "message": str(jincheng)})
-        elif status == str('restart'):
+        elif status == "restart":
             jincheng = subprocess.getoutput(["ansible all -i /etc/ansible/service_hosts/Flume_hosts -m shell -a 'supervisorctl -c /apps/webroot/production/supervisord/supervisord.conf restart flume'"])
             return jsonify({"code": 200,
                         "message": str(jincheng)})
