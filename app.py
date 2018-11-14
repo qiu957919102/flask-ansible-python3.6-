@@ -10,6 +10,7 @@
 一般信息就是message
 数据库信息就是data
 """
+from functools import wraps
 from flask import Flask, jsonify, request
 from profilemanager import logcreate
 from profilemanager import flumecreate
@@ -133,6 +134,7 @@ def ldap_login():
 
 """装饰器，拦截器，已经登陆的拦截器"""
 def login_required(func):
+    @wraps(func)
     def one(*args, **kwargs):
         if not r.get(session.get('username')):
             try:
@@ -148,23 +150,23 @@ def login_required(func):
 
 
 """配置管理logcouier中Tomcaterr路由"""
-@app.route('/profilemanager/logcouier/tomcaterr/',methods=['POST'])
+@app.route('/profilemanager/logcouier/tomcaterr',methods=['POST'])
 @login_required
 def Tomcat_err():
     creater = session.get('username')
     Tomcatcreate = logcreate.LogProfile.TomcatErr
     """###从前端获得数据###前端数据需要用逗号，分割"""
-    Tomcat_errLogPath = request.form['TomcaterrLogPath']
+    Tomcat_errLogPath = request.form['LogPath']
     Tomcat_errLogPathList = Tomcat_errLogPath.split(",")
-    Tomcat_errLogType = request.form['TomcaterrLogType']
+    Tomcat_errLogType = request.form['LogType']
     Tomcat_errLogTypeList = Tomcat_errLogType.split(",")
-    Tomcat_errLogHost = request.form['TomcaterrLogHost']
+    Tomcat_errLogHost = request.form['LogHost']
     """此处会把hostlist分成好几种方式分别用于创建文件目录即ansible主机vars"""
     Tomcat_errLogHostList = Tomcat_errLogHost.split(",")
     """下面的会用于创建目录，也会是playbook里面的muluname变量"""
     DirectoryTomcatHostStr =  ("").join(Tomcat_errLogHostList)
     """获得对应的主机名"""
-    Tomcat_errLogHostName = request.form['TomcaterrLogHostName']
+    Tomcat_errLogHostName = request.form['LogHostName']
     Tomcat_errLogHostNameList = Tomcat_errLogHostName.split(",")
     """生成ip跟host字典"""
     Tomcat_errIpHostNamedict = dict(zip(Tomcat_errLogHostList, Tomcat_errLogHostNameList))
@@ -199,23 +201,23 @@ def Tomcat_err():
 
 
 """配置管理logcouier中nginxacces路由"""
-@app.route('/profilemanager/logcouier/nginxaccess/', methods=['POST'])
+@app.route('/profilemanager/logcouier/nginxaccess', methods=['POST'])
 @login_required
 def Nginx_access():
     creater = session.get('username')
     Nginxcreate = logcreate.LogProfile.NginxAccess
     """###从前端获得数据###前端数据需要用逗号，分割##"""
-    Nginx_accessLogPath = request.form['NginxaccessLogPath']
+    Nginx_accessLogPath = request.form['LogPath']
     Nginx_accessLogPathList = Nginx_accessLogPath.split(",")
-    Nginx_accessLogType = request.form['NginxaccessLogType']
+    Nginx_accessLogType = request.form['LogType']
     Nginx_accessLogTypeList = Nginx_accessLogType.split(",")
-    Nginx_accessLogHost = request.form['NginxaccessLogHost']
+    Nginx_accessLogHost = request.form['LogHost']
     """此处会把hostlist分成好几种方式分别用于创建文件目录即ansible主机vars"""
     Nginx_accessLogHostList = Nginx_accessLogHost.split(",")
     """下面的会用于创建目录，也会是playbook里面的muluname变量"""
     DirectoryTomcatHostStr = ("").join(Nginx_accessLogHostList)
     """主机ip对应的主机名"""
-    Nginx_accessLogHostName = request.form['NginxaccessLogHostName']
+    Nginx_accessLogHostName = request.form['LogHostName']
     Nginx_accessLogHostNameList = Nginx_accessLogHostName.split(",")
     """生成ip跟hostname的字典"""
     Nginx_accessLogHostIpHostNamedict = dict(zip(Nginx_accessLogHostList, Nginx_accessLogHostNameList))
@@ -243,7 +245,7 @@ def Nginx_access():
                         "message": str(jincheng)})
 
 """配置管理flume路由"""
-@app.route('/profilemanager/flumeprofiler/', methods=['POST'])
+@app.route('/profilemanager/flumeprofiler', methods=['POST'])
 @login_required
 def Flume():
     creater = session.get('username')
@@ -329,7 +331,7 @@ def ServerLogcouier(LogCouierPageNo):
 def ServerLogcouierStatus(STATUS):
     status = STATUS
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
-    LogCouier_IP = request.form['LogCouier_IP']
+    LogCouier_IP = request.form['IP']
     """逗号分割"""
     LogCouier_IP_List = LogCouier_IP.split(",")
     if status != "":
@@ -365,7 +367,7 @@ def ServerFlume(FlumePageNo):
 def ServerFlumeStatus(STATUS):
     status = STATUS
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
-    Flume_IP = request.form['FLume_IP']
+    Flume_IP = request.form['IP']
     Flume_IP_List = Flume_IP.split(",")
     if status != "":
         if status == "stop":
@@ -423,7 +425,7 @@ def ServerFlumeSheetLoad(id):
 
 
 """需求单"""
-@app.route('/rd/requirement/', methods=['POST'])
+@app.route('/rd/requirement', methods=['POST'])
 @login_required
 def RdRequirement():
     creater = session.get('username')
