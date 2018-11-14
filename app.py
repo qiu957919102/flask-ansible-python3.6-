@@ -354,9 +354,9 @@ def ServerFlume(FlumePageNo):
 
 
 """服务管理flume状态启动"""
-@app.route('/servermanager/flume/detailed/', methods=['POST'])
-def ServerFlumeStatus():
-    status = request.form['STATUS']
+@app.route('/servermanager/flume/detailed/<STATUS>', methods=['POST'])
+def ServerFlumeStatus(STATUS):
+    status = STATUS
     """这里需要说明两个变量的传递进来的方式是不同的，其中STATUS是根据url进来的，LogCouier_IP是body进来的"""
     Flume_IP = request.form['FLume_IP']
     Flume_IP_List = Flume_IP.split(",")
@@ -379,24 +379,18 @@ def ServerFlumeStatus():
 @app.route('/servermanager/logcouier/sheet/<LogCouierPageNo>', methods=['POST'])
 def ServerLogCouierSheet(LogCouierPageNo):
     LogCouier_PageNo = LogCouierPageNo
-    if __name__ == 'main':
-        LogCouier_PageNum = PageCount(tablename="bdg_agent_logcouier_sheet", pagesize=Page_Size)
-        LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_sample_sheet(pageNo=LogCouier_PageNo, pagesize=Page_Size)
-        return jsonify({"pagenum": LogCouier_PageNum,
-                        "data": LogCouierSelect_Data,
-                        "code": 200})
+    LogCouier_PageNum = PageCount(tablename="bdg_agent_logcouier_sheet", pagesize=Page_Size)
+    LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_sample_sheet(pageNo=LogCouier_PageNo, pagesize=Page_Size)
+    return jsonify({"pagenum": LogCouier_PageNum, "data": LogCouierSelect_Data, "code": 200})
 
 
 """flume的一级菜单"""
 @app.route('/servermanager/flume/sheet/<FlumePageNo>', methods=['POST'])
 def ServerFlumeSheet(FlumePageNo):
     Flume_PageNo = FlumePageNo
-    if __name__ == 'main':
-        Flume_PageNum = PageCount(tablename="bdg_agent_flume_sheet", pagesize=Page_Size)
-        FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_sample_sheet(pageNo=Flume_PageNo, pagesize=Page_Size)
-        return jsonify({"pagenum": Flume_PageNum,
-                        "data": FlumeSelect_Data,
-                        "code": 200})
+    Flume_PageNum = PageCount(tablename="bdg_agent_flume_sheet", pagesize=Page_Size)
+    FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_sample_sheet(pageNo=Flume_PageNo, pagesize=Page_Size)
+    return jsonify({"pagenum": Flume_PageNum, "data": FlumeSelect_Data, "code": 200})
 
 
 
@@ -405,19 +399,15 @@ def ServerFlumeSheet(FlumePageNo):
 @app.route('/servermanager/logcouier/sheet/detailed/<id>/', methods=['POST'])
 def ServerLogcouierSheetLoad(id):
     ID = id
-    if __name__ == 'main':
-        LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_all_sheet(id=ID)
-        return jsonify({"data": LogCouierSelect_Data,
-                        "code": 200})
+    LogCouierSelect_Data = logcouiemysql.log_couier_mysql.Select_Logcouier_all_sheet(id=ID)
+    return jsonify({"data": LogCouierSelect_Data, "code": 200})
 
 """flume的二级菜单"""
 @app.route('/servermanager/flume/sheet/detailed/<id>/', methods=['POST'])
 def ServerFlumeSheetLoad(id):
     ID = id
-    if __name__ == 'main':
-        FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_all_sheet(id=ID)
-        return jsonify({"data": FlumeSelect_Data,
-                        "code": 200})
+    FlumeSelect_Data = flumemysql.flume_mysql.Select_Flume_all_sheet(id=ID)
+    return jsonify({"data": FlumeSelect_Data, "code": 200})
 
 
 
@@ -455,20 +445,15 @@ def RdRequirement():
 def RdRequirementSheet(pageNo):
     """此处默认必须是第一页"""
     RdPageNO = pageNo
-    if __name__ == 'main':
-        RdPage_Num = PageCount(tablename="bdg_agent_rd_sheet", pagesize=Page_Size)
-        Rd_Data = rdmysql.rd_mysql.SelectInto(pageNo=RdPageNO, pagesize=Page_Size)
-        return jsonify({"pagenum": RdPage_Num,
-                        "data": Rd_Data,
-                        "code": 200})
+    RdPage_Num = PageCount(tablename="bdg_agent_rd_sheet", pagesize=Page_Size)
+    Rd_Data = rdmysql.rd_mysql.SelectInto(pageNo=RdPageNO, pagesize=Page_Size)
+    return jsonify({"pagenum": RdPage_Num, "data": Rd_Data, "code": 200})
 """需求单详细页面"""
 @app.route('/rd/requiremensheet/detailed/<id>', methods=['POST'])
 def RdRequirementSheetLoad(id):
     ID = id
-    if __name__ == 'main':
-        RdSelect_Data = rdmysql.rd_mysql.Select_rd_all_sheet(id=ID)
-        return jsonify({"data": RdSelect_Data,
-                        "code": 200})
+    RdSelect_Data = rdmysql.rd_mysql.Select_rd_all_sheet(id=ID)
+    return jsonify({"data": RdSelect_Data, "code": 200})
 
 
 
