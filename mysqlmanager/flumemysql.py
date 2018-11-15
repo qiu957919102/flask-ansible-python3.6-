@@ -47,7 +47,7 @@ class flume_mysql:
             body = []
             for i in range(cur.rowcount):
                 body.append({'id': results[i][0], 'ip': results[i][1], 'hostname': results[i][2], 'creator': results[i][3]})
-                return str(body)
+            return body
         except Exception as e:
             # 错误回滚
             logerr.logger.error(e)

@@ -68,24 +68,16 @@ def hello_world():
 """拦截器，用户已经登陆过，但是关闭浏览器，但是session没有过期的情况"""
 @app.route('/beforelogin', methods=['POST'])
 def before_login():
-    try:
-        if session.get('usernmae') == True:
-            if not r.get(session.get('username')):
-                return jsonify({"code": 1301,
+    if session.get('usernmae') != "":
+        if not r.get(session.get('username')):
+                return jsonify({"code": 699,
                                 "message": "未登录请返回到登陆页面"})
-            else:
-                """如果在session会话内，就应该直接转到相应的页面"""
-                if session.get('username') in User:
-                    return jsonify({"code": 10086,
-                                    "message": session.get('username')})
-                return jsonify({"code": 10000,
-                                "message": session.get('username')})
         else:
-            return jsonify({"code": 10000,
-                            "message": session.get('username')})
-    except Exception:
-        return jsonify({"code": 10000,
-                        "message": session.get('username')})
+            """如果在session会话内，就应该直接转到相应的页面"""
+            if session.get('username') in User:
+                return jsonify({"code": 10086, "message": session.get('username')})
+            return jsonify({"code": 10000, "message": session.get('username')})
+    return jsonify({"code": 699, "message": "未登录请返回到登陆页面"})
 
 
 
@@ -97,8 +89,11 @@ def ldap_login():
     LDAP = ldap.ldap_auth
     """进行ldap验证"""
     data = LDAP(username=username, password=password)
-    userID = data[3]
-    if userID != "":
+    try:
+        userID = data[3]
+    except Exception:
+        data = ""
+    if data != "":
         if username in User:
             """返回10086状态码，显示全网页"""
             try:

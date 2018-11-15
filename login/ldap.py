@@ -40,10 +40,10 @@ def ldap_auth(username, password):
             if conn2.result["description"] == "success":
                 return (True, attr_dict["mail"], attr_dict["sAMAccountName"], attr_dict["givenName"])
             else:
-                return (False, None, None, None)
+                return ("")
         except Exception as e:
-            return (False, None, None, None)
+            return ("")
     else:
-        return (False, None, None, None)
+        return ("")
 
 
