@@ -1,0 +1,68 @@
+#### 数据库：
+Create database bdg_agent default character set utf8;
+
+#### 创建表：rd 需求单存放表
+CREATE TABLE bdg_agent_rd_sheet (`id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '自增唯一',
+`creator`  varchar(45) NOT NULL COMMENT '创建者',
+`create_time` timestamp NOT NULL COMMENT '用户记录创建的时间',
+`project` varchar(30) NOT NULL COMMENT '项目名',
+`errlogpath` varchar(500) DEFAULT NULL  COMMENT '错误日志路径',
+`logpath` varchar(500)  DEFAULT NULL COMMENT '业务日志路径',
+`hostip` varchar(100)  NOT NULL COMMENT '需要收集的主机名',
+`notify` varchar(300) NOT NULL COMMENT '需要的通知人',
+`status` varchar(20)  default '未处理' NOT NULL COMMENT '处理状态',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='rd用户需求单表';
+
+#### 创建表：logcouier工单存放表
+CREATE TABLE bdg_agent_logcouier_sheet (
+`id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '自增唯一',
+`creator`  varchar(45) NOT NULL COMMENT '创建者',
+`create_time` timestamp NOT NULL COMMENT '用户记录创建的时间',
+`errlogpath` varchar(500) DEFAULT NULL  COMMENT 'logcouier_tomcat错误日志路径',
+`logpath` varchar(500)  DEFAULT NULL COMMENT 'logcouier_nginx业务日志路径',
+`type` varchar(500) NOT NULL COMMENT 'logcouier日志类型',
+`hostip` varchar(100)  NOT NULL COMMENT '需要收集的主机ip',
+`hostname` varchar(100) NOT NULL COMMENT '需要收集的主机ip对应的主机名',
+`output` varchar(5000)  DEFAULT NULL  COMMENT 'logcouier调用ansible后的输出结果',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='logcouier工单表';
+
+
+#### 创建表：flume工单存放表
+CREATE TABLE bdg_agent_flume_sheet (
+`id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '自增唯一',
+`creator`  varchar(45) NOT NULL COMMENT '创建者',
+`create_time` timestamp NOT NULL COMMENT '用户记录创建的时间',
+`logpath` varchar(500)  DEFAULT NULL COMMENT 'flume日志路径',
+`groups` varchar(500) NOT NULL COMMENT 'flumefilegroups类型',
+`flumeserversource` varchar(30) NOT NULL COMMENT 'flume源名称',
+`flumelogdir` varchar(30) NOT NULL COMMENT 'flume目录名称',
+`hostip` varchar(100)  NOT NULL COMMENT '需要收集的主机ip',
+`hostname` varchar(100) NOT NULL COMMENT '需要收集的主机ip对应的主机名',
+`output` varchar(5000)  DEFAULT NULL  COMMENT 'flume调用ansible后的输出结果',
+PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='flume工单表';
+
+#### 创建表： logcouier服务所在主机
+CREATE TABLE bdg_agent_logcouier_host (
+`id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '自增唯一',
+`create_time` timestamp NOT NULL COMMENT '用户记录创建的时间',
+`ip` varchar(20)  NOT NULL COMMENT 'logcouier所在主机ip',
+`hostname` varchar(200) NOT NULL COMMENT 'logcouier所在主机名',
+`creator`  varchar(45) NOT NULL COMMENT '创建者',
+PRIMARY KEY (`id`),
+UNIQUE KEY `idx_ip` (`ip`),
+UNIQUE KEY `idx_hostname` (`hostname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='logcouier所在主机';
+
+
+#### 创建表： flume服务所在主机
+CREATE TABLE bdg_agent_flume_host (
+`id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '自增唯一',
+`create_time` timestamp NOT NULL COMMENT '用户记录创建的时间',
+`ip` varchar(20)  NOT NULL COMMENT 'flume所在主机ip',
+`hostname` varchar(200) NOT NULL COMMENT 'flume所在主机名',
+`creator`  varchar(45) NOT NULL COMMENT '创建者',
+PRIMARY KEY (`id`),
+UNIQUE KEY `idx_ip` (`ip`),
+UNIQUE KEY `idx_hostname` (`hostname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='flume所在主机';
+
