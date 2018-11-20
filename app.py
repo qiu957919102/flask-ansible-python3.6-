@@ -60,7 +60,7 @@ def send_async_email(app, msg):
 """定义session key值 secret_key：密钥。这个是必须的，如果没有配置 secret_key 就直接使用 session 会报错"""
 app.secret_key = 'Z&ugQh7oSN3k!XOR%tBT'
 """op跟大数据的人员控制"""
-User = ['zhangliyuan01', 'chenbixia', 'jialiyang', 'yangyakun', 'zhangpeng', 'zhuxingtao', 'zhangxiaolong', 'wanglei01','wangfan01', 'quxiyang']
+User = ['']
 @app.route('/')
 def hello_world():
     return 'Hello World! l ala'
