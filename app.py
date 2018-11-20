@@ -32,7 +32,8 @@ import redis
 r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
 """
 """采用以下的方法做连接资源池"""
-pool = redis.ConnectionPool(host='172.21.139.9', port=6379, decode_responses=True, max_connections=10000)
+#pool = redis.ConnectionPool(host='172.21.139.9', port=6379, decode_responses=True, max_connections=10000, password='123123')
+pool = redis.ConnectionPool(host='r-2ze3517375689d94.redis.rds.aliyuncs.com', port=6379, decode_responses=True, max_connections=10000, password='opKpqF5ULC')
 r = redis.Redis(connection_pool=pool)
 
 
@@ -168,7 +169,10 @@ def Tomcat_err():
     """生成path跟type字典"""
     Tomcat_errLogPathTypedict = dict(zip(Tomcat_errLogPathList, Tomcat_errLogTypeList))
     """####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
-    if __name__ == '__main__':
+    if Tomcat_errLogPath == "" or Tomcat_errLogType == "" or Tomcat_errLogHost == "" or Tomcat_errLogHostName == "":
+        return jsonify({"code": 201,
+                        "message": "请正确输入"})
+    else:
         for Path in Tomcat_errLogPathTypedict.keys():
             Tomcatcreate(Path, Tomcat_errLogPathTypedict[Path], DirectoryTomcatHostStr)
         """调用ansibl"""
@@ -184,6 +188,7 @@ def Tomcat_err():
 
         for HostIp in Tomcat_errIpHostNamedict.keys():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Tomcat_errIpHostNamedict[HostIp], creater=creater)
+            loginfo.logger.info("Tomcat主机IP" + " " + HostIp + " " + Tomcat_errIpHostNamedict[HostIp])
         """记录日志"""
         loginfo.logger.info("配置管理Tomcat" + " " + Tomcat_errLogPath + " " + Tomcat_errLogType + " " + Tomcat_errLogHost + " " + Tomcat_errLogHostName + " " + jincheng)
         return jsonify({"code": 200,
@@ -219,7 +224,10 @@ def Nginx_access():
     """生成path跟type的字典"""
     Nginx_accessLogPathTypedict = dict(zip(Nginx_accessLogPathList, Nginx_accessLogTypeList))
     """"####通过循环创建模板，先创建不同的roles--主机目录；在个目录下创建各个模板###"""
-    if __name__ == '__main__':
+    if Nginx_accessLogPath == "" or Nginx_accessLogType == "" or Nginx_accessLogHost == "" or Nginx_accessLogHostName == "":
+        return jsonify({"code": 201,
+                        "message": "请正确输入"})
+    else:
         for Path in Nginx_accessLogPathTypedict.keys():
             Nginxcreate(LogPath=Path, LogType=Nginx_accessLogPathTypedict[Path], DirectoyHost=DirectoryTomcatHostStr)
             """调用ansibleapi"""
@@ -234,6 +242,7 @@ def Nginx_access():
         logcouieriphostnameinsertmysql = insertintoiphostname.IpHostNameInserInto.LogCouierInserInto
         for HostIp in Nginx_accessLogHostIpHostNamedict.keys():
             logcouieriphostnameinsertmysql(ip=HostIp, hostname=Nginx_accessLogHostIpHostNamedict[HostIp], creater=creater)
+            loginfo.logger.info("nginx主机IP" + " " + HostIp + " " + Nginx_accessLogHostIpHostNamedict[HostIp])
         """记录日志"""
         loginfo.logger.info("配置管理nginx" + " " + Nginx_accessLogPath + " " + Nginx_accessLogType + " " + Nginx_accessLogHost + " " + Nginx_accessLogHostName + " " + jincheng)
         return jsonify({"code": 200,
@@ -277,7 +286,10 @@ def Flume():
     """生成group与path对应字典"""
     FlumeWeb_FileGroupSingleFilePathDict = dict(zip(FlumeWeb_FileGroupSingle, FlumeWeb_FilePath_list))
     """创建flume模板"""
-    if __name__ == "__main__":
+    if FlumeWeb_ServerSources == "" or FlumeWeb_FileGroups == "" or FlumeWeb_FilePath == "" or FlumeWeb_LogHost == "" or FlumeWeb_LogHostName == "" or FlumeWeb_LogDir == "":
+        return jsonify({"code": 201,
+                        "message": "请正确输入"})
+    else:
         FlumeWeb.FlumeProfileHeadOne(ServerSources=FlumeWeb_ServerSourcesStr, FileGroups=FlumeWeb_FileGroups_Real, LogHost=DirectoryTomcatHostStr)
         for i in FlumeWeb_FileGroupSingleFilePathDict.keys():
             FlumeWeb.FlumeProfileBodyOne(ServerSources=FlumeWeb_ServerSourcesStr, FileGroupSingle=i, FilePath=FlumeWeb_FileGroupSingleFilePathDict[i], LogHost=DirectoryTomcatHostStr)
@@ -298,6 +310,7 @@ def Flume():
         flumeiphostnameinsert = insertintoiphostname.IpHostNameInserInto.FlumeInserInto
         for HostIp in FlumeWeb_IpHostNamedict.keys():
             flumeiphostnameinsert(ip=HostIp, hostname=FlumeWeb_IpHostNamedict[HostIp], creater=creater)
+            loginfo.logger.info("flume主机" + " " + HostIp + " " + FlumeWeb_IpHostNamedict[HostIp])
 
         """记录日志"""
         loginfo.logger.info("配置管理flume" + " " + FlumeWeb_FilePath + " " + FlumeWeb_FileGroups + " " + FlumeWeb_LogDirStr + " " + FlumeWeb_LogHost + " " + FlumeWeb_LogHostName + " " + jincheng)
