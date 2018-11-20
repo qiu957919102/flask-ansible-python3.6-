@@ -32,8 +32,7 @@ import redis
 r = redis.Redis(host='192.168.136.132', port=6379, decode_responses=True)
 """
 """采用以下的方法做连接资源池"""
-#pool = redis.ConnectionPool(host='172.21.139.9', port=6379, decode_responses=True, max_connections=10000, password='123123')
-pool = redis.ConnectionPool(host='r-2ze3517375689d94.redis.rds.aliyuncs.com', port=6379, decode_responses=True, max_connections=10000, password='opKpqF5ULC')
+pool = redis.ConnectionPool(host='172.21.139.9', port=6379, decode_responses=True, max_connections=10000, password='123123')
 r = redis.Redis(connection_pool=pool)
 
 
